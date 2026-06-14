@@ -69,57 +69,25 @@ tailwind.config = {
 
       <!-- Search -->
       <div>
-        <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">SEARCH TEAM OR CITY</label>
-        <input id="search" type="text" placeholder="e.g. Türkiye, Brazil, Miami…" class="border rounded-lg px-3 py-2 text-sm w-52" oninput="applyFilters()">
+        <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">SEARCH TEAM</label>
+        <input id="search" type="text" list="teamOptions" autocomplete="off" placeholder="e.g. Türkiye, Brazil, Argentina…" class="border rounded-lg px-3 py-2 text-sm w-64" oninput="applyFilters()">
+        <datalist id="teamOptions"></datalist>
       </div>
 
-      <!-- Highlight Country -->
-      <div>
-        <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">⭐ HIGHLIGHT COUNTRY</label>
-        <select id="highlight" class="border rounded-lg px-3 py-2 text-sm w-40" onchange="applyFilters()">
-          <option value="">None</option>
-        </select>
+      <!-- Day selector -->
+      <div id="dayWrap">
+        <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">JUMP TO DAY</label>
+        <input id="daySelect" type="date" class="border rounded-lg px-3 py-2 text-sm w-48" onchange="applyFilters()">
       </div>
 
-      <!-- Filter Team -->
-      <div>
-        <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">FILTER TEAM</label>
-        <select id="filterTeam" class="border rounded-lg px-3 py-2 text-sm w-40" onchange="applyFilters()">
-          <option value="">All teams</option>
-        </select>
-      </div>
+      <button onclick="clearFilters()" class="border px-5 py-2 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Clear</button>
 
-      <!-- Stadium -->
-      <div>
-        <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">STADIUM</label>
-        <select id="filterStadium" class="border rounded-lg px-3 py-2 text-sm w-44" onchange="applyFilters()">
-          <option value="">All venues</option>
-        </select>
-      </div>
-    </div>
+      <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer select-none">
+        <input id="hidePlayed" type="checkbox" checked onchange="applyFilters()" class="w-4 h-4 accent-trt"> Hide finished matches
+      </label>
 
-    <div class="flex flex-wrap gap-3 items-center mt-3">
-      <!-- Stage -->
-      <div>
-        <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">STAGE</label>
-        <select id="filterStage" class="border rounded-lg px-3 py-2 text-sm w-40" onchange="applyFilters()">
-          <option value="">All stages</option>
-          <option value="group">Group Stage</option>
-          <option value="round32">Round of 32</option>
-          <option value="round16">Round of 16</option>
-          <option value="quarter">Quarter-finals</option>
-          <option value="semi">Semi-finals</option>
-          <option value="third">Third Place</option>
-          <option value="final">Final</option>
-        </select>
-      </div>
-
-      <button onclick="scrollToToday()" class="bg-trt text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-red-700 mt-4">Today / Next ›</button>
-      <button onclick="clearFilters()" class="border px-5 py-2 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 mt-4">Clear</button>
-
-      <div class="flex gap-5 ml-auto mt-4 text-xs text-gray-500 items-center">
+      <div class="flex gap-5 ml-auto text-xs text-gray-500 items-center">
         <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-trt inline-block"></span> Türkiye time</span>
-        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-highlight inline-block"></span> Highlighted country</span>
         <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-live inline-block"></span> Live now</span>
         <span id="matchCount" class="font-semibold text-gray-700"></span>
       </div>
@@ -332,6 +300,24 @@ const MATCHES = [
 ];
 
 // ============================
+// SCORES — SEPARATE OVERLAY (keyed by match id)
+// MATCHES array above stays untouched. Only add results here.
+// status: "FT" = full time. Add entries as matches finish.
+// TODO: replace placeholder 0-0 values below with real scores.
+// Future: this map will be filled from an API instead of hardcoded.
+// ============================
+const SCORES = {
+  1: {home:0, away:0, status:"FT"}, // Mexico v South Africa
+  2: {home:0, away:0, status:"FT"}, // South Korea v Czechia
+  3: {home:0, away:0, status:"FT"}, // Canada v Bosnia and Herzegovina
+  4: {home:0, away:0, status:"FT"}, // USA v Paraguay
+  5: {home:0, away:0, status:"FT"}, // Qatar v Switzerland
+  6: {home:0, away:0, status:"FT"}, // Brazil v Morocco
+};
+
+function getScore(m) { return SCORES[m.id] || null; }
+
+// ============================
 // HELPERS
 // ============================
 const TRT = "Europe/Istanbul";
@@ -404,6 +390,17 @@ function allVenuesSorted() {
   return [...s].sort();
 }
 
+function allDaysSorted() {
+  const s = new Set();
+  MATCHES.forEach(m => s.add(localDateKey(m.utc, m.city)));
+  return [...s].sort();
+}
+
+// A match is "finished" ~2h after kick-off
+function isPlayed(utc) {
+  return Date.now() > new Date(utc).getTime() + 120*60*1000;
+}
+
 // ============================
 // STATE
 // ============================
@@ -412,23 +409,19 @@ let state = { view: "day" };
 function getFilters() {
   return {
     search: document.getElementById("search").value.toLowerCase().trim(),
-    highlight: document.getElementById("highlight").value,
-    filterTeam: document.getElementById("filterTeam").value,
-    filterStadium: document.getElementById("filterStadium").value,
-    filterStage: document.getElementById("filterStage").value,
+    day: document.getElementById("daySelect").value,
+    hidePlayed: document.getElementById("hidePlayed").checked,
   };
 }
 
 function filterMatches() {
   const f = getFilters();
   return MATCHES.filter(m => {
-    if (f.filterTeam && m.home !== f.filterTeam && m.away !== f.filterTeam) return false;
-    if (f.filterStadium && m.city !== f.filterStadium) return false;
-    if (f.filterStage && m.phase !== f.filterStage) return false;
     if (f.search) {
-      const hay = [m.home, m.away, m.city, VENUES[m.city]?.stadium, m.group||""].join(" ").toLowerCase();
-      if (!hay.includes(f.search)) return false;
+      if (!m.home.toLowerCase().includes(f.search) && !m.away.toLowerCase().includes(f.search)) return false;
     }
+    if (f.day && localDateKey(m.utc, m.city) !== f.day) return false;
+    if (f.hidePlayed && isPlayed(m.utc)) return false;
     return true;
   });
 }
@@ -468,24 +461,39 @@ function renderMatchCard(m, highlight) {
   if (live) badge = `<span class="inline-block bg-live text-white text-[10px] font-bold px-2 py-0.5 rounded mt-1">LIVE</span>`;
   else if (isNext) badge = `<span class="inline-block bg-gray-900 text-white text-[10px] font-bold px-2 py-0.5 rounded mt-1">UP NEXT</span>`;
 
+  // Score overlay (from SCORES map; null if not played/recorded)
+  const score = getScore(m);
+  let homeScore = "", awayScore = "", homeWin = "", awayWin = "", ftBadge = "";
+  if (score) {
+    homeScore = `<span class="text-xl font-bold tabular-nums ml-auto pl-3">${score.home}</span>`;
+    awayScore = `<span class="text-xl font-bold tabular-nums ml-auto pl-3">${score.away}</span>`;
+    if (score.status === "FT") {
+      if (score.home > score.away) awayWin = "text-gray-400";
+      else if (score.away > score.home) homeWin = "text-gray-400";
+      ftBadge = `<span class="inline-block bg-gray-200 text-gray-700 text-[10px] font-bold px-2 py-0.5 rounded mt-1">FT</span>`;
+    }
+  }
+
   return `
   <div class="${cardClass}" id="match-${m.id}">
     <!-- Phase + Badge -->
     <div class="w-32 shrink-0">
       ${phaseLabel}
-      <div>${badge}</div>
+      <div>${badge}${ftBadge}</div>
     </div>
 
     <!-- Teams -->
     <div class="flex-1 min-w-[200px]">
-      <div class="flex items-center gap-2 text-base font-medium ${homeHL}">
+      <div class="flex items-center gap-2 text-base font-medium ${homeHL} ${homeWin}">
         <span class="text-xl">${flag(m.home)}</span>
         <span>${m.home}</span>
+        ${homeScore}
       </div>
       <div class="text-xs text-gray-400 my-0.5 ml-8">v</div>
-      <div class="flex items-center gap-2 text-base font-medium ${awayHL}">
+      <div class="flex items-center gap-2 text-base font-medium ${awayHL} ${awayWin}">
         <span class="text-xl">${flag(m.away)}</span>
         <span>${m.away}</span>
+        ${awayScore}
       </div>
     </div>
 
@@ -523,6 +531,9 @@ function renderDayView(matches, highlight) {
   });
 
   const sortedDays = Object.keys(byDay).sort();
+  if (!sortedDays.length) {
+    return `<div class="text-center text-gray-400 py-16 text-sm">No matches for this selection.</div>`;
+  }
   let html = "";
 
   sortedDays.forEach(dayKey => {
@@ -605,9 +616,9 @@ function render() {
 
   const content = document.getElementById("content");
   if (state.view === "day") {
-    content.innerHTML = renderDayView(matches, f.highlight);
+    content.innerHTML = renderDayView(matches, null);
   } else {
-    content.innerHTML = renderPhaseView(matches, f.highlight);
+    content.innerHTML = renderPhaseView(matches, null);
   }
 }
 
@@ -621,29 +632,18 @@ function setView(v) {
   document.getElementById("btn-phase").className = v==="phase"
     ? "px-5 py-2 text-sm font-medium bg-gray-900 text-white"
     : "px-5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100";
+  // Day jump only meaningful in day view
+  document.getElementById("dayWrap").style.display = v === "day" ? "" : "none";
   render();
 }
 
 function clearFilters() {
   document.getElementById("search").value = "";
-  document.getElementById("highlight").value = "";
-  document.getElementById("filterTeam").value = "";
-  document.getElementById("filterStadium").value = "";
-  document.getElementById("filterStage").value = "";
+  document.getElementById("daySelect").value = "";
+  document.getElementById("hidePlayed").checked = true;
   render();
 }
 
-function scrollToToday() {
-  // Find today's section or next upcoming match
-  const todayKey = new Date().toLocaleDateString("en-CA");
-  let target = document.querySelector(`.day-section[data-date="${todayKey}"]`);
-  if (!target) {
-    // Find next upcoming match
-    const next = MATCHES.filter(m => isUpcoming(m.utc)).sort((a,b) => new Date(a.utc)-new Date(b.utc))[0];
-    if (next) target = document.getElementById(`match-${next.id}`);
-  }
-  if (target) target.scrollIntoView({behavior:"smooth",block:"start"});
-}
 
 // ============================
 // CLOCKS
@@ -672,21 +672,18 @@ function updateClocks() {
 // INIT
 // ============================
 function init() {
-  // Populate dropdowns
+  // Populate team autocomplete
   const teams = allTeamsSorted();
-  const venues = allVenuesSorted();
+  const dl = document.getElementById("teamOptions");
+  dl.innerHTML = teams.map(t => `<option value="${t}">${flag(t)} ${t}</option>`).join("");
 
-  const hlSel = document.getElementById("highlight");
-  const ftSel = document.getElementById("filterTeam");
-  const fsSel = document.getElementById("filterStadium");
-
-  teams.forEach(t => {
-    hlSel.innerHTML += `<option value="${t}">${flag(t)} ${t}</option>`;
-    ftSel.innerHTML += `<option value="${t}">${flag(t)} ${t}</option>`;
-  });
-  venues.forEach(v => {
-    fsSel.innerHTML += `<option value="${v}">${v} — ${VENUES[v].stadium}</option>`;
-  });
+  // Bound date picker to tournament range
+  const days = allDaysSorted();
+  const daySel = document.getElementById("daySelect");
+  if (days.length) {
+    daySel.min = days[0];
+    daySel.max = days[days.length - 1];
+  }
 
   updateClocks();
   setInterval(updateClocks, 1000);
