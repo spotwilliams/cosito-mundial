@@ -11,8 +11,6 @@ tailwind.config = {
     extend: {
       colors: {
         trt: '#dc2626',
-        trtBg: '#fef2f2',
-        highlight: '#f59e0b',
         live: '#16a34a',
       }
     }
@@ -25,7 +23,6 @@ tailwind.config = {
   .font-serif { font-family: 'Playfair Display', serif; }
   .match-card { transition: box-shadow 0.2s; }
   .match-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-  .match-card.highlighted { border-left: 4px solid #f59e0b; }
   .match-card.is-today { border-left: 4px solid #dc2626; }
   .match-card.is-live { border-left: 4px solid #16a34a; animation: pulse-border 2s infinite; }
   @keyframes pulse-border { 0%,100%{border-left-color:#16a34a} 50%{border-left-color:#bbf7d0} }
@@ -101,211 +98,17 @@ tailwind.config = {
 
 <script>
 // ============================
-// DATA — UPDATE THIS JSON FOR NEW RESULTS / KNOCKOUT MATCHUPS
+// DATA — venues/flags/groups/matches live in data.json (edit there)
 // ============================
-const VENUES = {
-  "Mexico City":    { stadium: "Estadio Azteca",              tz: "America/Mexico_City" },
-  "Guadalajara":    { stadium: "Estadio Akron",               tz: "America/Mexico_City" },
-  "Monterrey":      { stadium: "Estadio BBVA",                tz: "America/Monterrey" },
-  "Toronto":        { stadium: "BMO Field",                   tz: "America/Toronto" },
-  "Vancouver":      { stadium: "BC Place",                    tz: "America/Vancouver" },
-  "Los Angeles":    { stadium: "SoFi Stadium",                tz: "America/Los_Angeles" },
-  "San Francisco":  { stadium: "Levi's Stadium",              tz: "America/Los_Angeles" },
-  "New York/NJ":    { stadium: "MetLife Stadium",             tz: "America/New_York" },
-  "Boston":         { stadium: "Gillette Stadium",            tz: "America/New_York" },
-  "Philadelphia":   { stadium: "Lincoln Financial Field",     tz: "America/New_York" },
-  "Houston":        { stadium: "NRG Stadium",                 tz: "America/Chicago" },
-  "Dallas":         { stadium: "AT&T Stadium",                tz: "America/Chicago" },
-  "Atlanta":        { stadium: "Mercedes-Benz Stadium",       tz: "America/New_York" },
-  "Seattle":        { stadium: "Lumen Field",                 tz: "America/Los_Angeles" },
-  "Miami":          { stadium: "Hard Rock Stadium",           tz: "America/New_York" },
-  "Kansas City":    { stadium: "GEHA Field at Arrowhead",     tz: "America/Chicago" },
-};
-
-const FLAGS = {
-  "Mexico":"🇲🇽","South Africa":"🇿🇦","South Korea":"🇰🇷","Czechia":"🇨🇿",
-  "Canada":"🇨🇦","Bosnia and Herzegovina":"🇧🇦","Qatar":"🇶🇦","Switzerland":"🇨🇭",
-  "Brazil":"🇧🇷","Morocco":"🇲🇦","Haiti":"🇭🇹","Scotland":"🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-  "USA":"🇺🇸","Paraguay":"🇵🇾","Australia":"🇦🇺","Türkiye":"🇹🇷",
-  "Germany":"🇩🇪","Ivory Coast":"🇨🇮","Ecuador":"🇪🇨","Curaçao":"🇨🇼",
-  "Netherlands":"🇳🇱","Sweden":"🇸🇪","Tunisia":"🇹🇳","Japan":"🇯🇵",
-  "Belgium":"🇧🇪","Egypt":"🇪🇬","Iran":"🇮🇷","New Zealand":"🇳🇿",
-  "Spain":"🇪🇸","Cape Verde":"🇨🇻","Saudi Arabia":"🇸🇦","Uruguay":"🇺🇾",
-  "France":"🇫🇷","Senegal":"🇸🇳","Iraq":"🇮🇶","Norway":"🇳🇴",
-  "Argentina":"🇦🇷","Algeria":"🇩🇿","Austria":"🇦🇹","Jordan":"🇯🇴",
-  "Portugal":"🇵🇹","DR Congo":"🇨🇩","Uzbekistan":"🇺🇿","Colombia":"🇨🇴",
-  "England":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","Croatia":"🇭🇷","Ghana":"🇬🇭","Panama":"🇵🇦"
-};
-
-const GROUPS = {
-  A: ["Mexico","South Africa","South Korea","Czechia"],
-  B: ["Canada","Bosnia and Herzegovina","Qatar","Switzerland"],
-  C: ["Brazil","Morocco","Haiti","Scotland"],
-  D: ["USA","Paraguay","Australia","Türkiye"],
-  E: ["Germany","Ivory Coast","Ecuador","Curaçao"],
-  F: ["Netherlands","Sweden","Tunisia","Japan"],
-  G: ["Belgium","Egypt","Iran","New Zealand"],
-  H: ["Spain","Cape Verde","Saudi Arabia","Uruguay"],
-  I: ["France","Senegal","Iraq","Norway"],
-  J: ["Argentina","Algeria","Austria","Jordan"],
-  K: ["Portugal","DR Congo","Uzbekistan","Colombia"],
-  L: ["England","Croatia","Ghana","Panama"],
-};
-
-// ============================
-// MATCHES — 104 TOTAL
-// phase: group | round32 | round16 | quarter | semi | third | final
-// For knockout TBD matches, home/away contain descriptive labels
-// ============================
-const MATCHES = [
-  // === GROUP STAGE ===
-  // Group A
-  {id:1,  phase:"group",group:"A",md:1,home:"Mexico",away:"South Africa",utc:"2026-06-11T19:00:00Z",city:"Mexico City"},
-  {id:2,  phase:"group",group:"A",md:1,home:"South Korea",away:"Czechia",utc:"2026-06-12T02:00:00Z",city:"Guadalajara"},
-  {id:25, phase:"group",group:"A",md:2,home:"Czechia",away:"South Africa",utc:"2026-06-18T16:00:00Z",city:"Atlanta"},
-  {id:28, phase:"group",group:"A",md:2,home:"Mexico",away:"South Korea",utc:"2026-06-19T03:00:00Z",city:"Guadalajara"},
-  {id:53, phase:"group",group:"A",md:3,home:"South Africa",away:"South Korea",utc:"2026-06-25T01:00:00Z",city:"Guadalajara"},
-  {id:54, phase:"group",group:"A",md:3,home:"Czechia",away:"Mexico",utc:"2026-06-25T01:00:00Z",city:"Mexico City"},
-
-  // Group B
-  {id:3,  phase:"group",group:"B",md:1,home:"Canada",away:"Bosnia and Herzegovina",utc:"2026-06-12T19:00:00Z",city:"Toronto"},
-  {id:5,  phase:"group",group:"B",md:1,home:"Qatar",away:"Switzerland",utc:"2026-06-13T19:00:00Z",city:"San Francisco"},
-  {id:26, phase:"group",group:"B",md:2,home:"Switzerland",away:"Bosnia and Herzegovina",utc:"2026-06-18T19:00:00Z",city:"Los Angeles"},
-  {id:27, phase:"group",group:"B",md:2,home:"Canada",away:"Qatar",utc:"2026-06-18T22:00:00Z",city:"Vancouver"},
-  {id:49, phase:"group",group:"B",md:3,home:"Switzerland",away:"Canada",utc:"2026-06-24T19:00:00Z",city:"Vancouver"},
-  {id:50, phase:"group",group:"B",md:3,home:"Bosnia and Herzegovina",away:"Qatar",utc:"2026-06-24T19:00:00Z",city:"Seattle"},
-
-  // Group C
-  {id:6,  phase:"group",group:"C",md:1,home:"Brazil",away:"Morocco",utc:"2026-06-13T22:00:00Z",city:"New York/NJ"},
-  {id:7,  phase:"group",group:"C",md:1,home:"Haiti",away:"Scotland",utc:"2026-06-14T01:00:00Z",city:"Boston"},
-  {id:30, phase:"group",group:"C",md:2,home:"Scotland",away:"Morocco",utc:"2026-06-19T22:00:00Z",city:"Boston"},
-  {id:31, phase:"group",group:"C",md:2,home:"Brazil",away:"Haiti",utc:"2026-06-20T01:00:00Z",city:"Philadelphia"},
-  {id:51, phase:"group",group:"C",md:3,home:"Morocco",away:"Haiti",utc:"2026-06-24T22:00:00Z",city:"Atlanta"},
-  {id:52, phase:"group",group:"C",md:3,home:"Scotland",away:"Brazil",utc:"2026-06-24T22:00:00Z",city:"Miami"},
-
-  // Group D
-  {id:4,  phase:"group",group:"D",md:1,home:"USA",away:"Paraguay",utc:"2026-06-13T01:00:00Z",city:"Los Angeles"},
-  {id:8,  phase:"group",group:"D",md:1,home:"Australia",away:"Türkiye",utc:"2026-06-14T04:00:00Z",city:"Vancouver"},
-  {id:29, phase:"group",group:"D",md:2,home:"USA",away:"Australia",utc:"2026-06-19T19:00:00Z",city:"Seattle"},
-  {id:32, phase:"group",group:"D",md:2,home:"Türkiye",away:"Paraguay",utc:"2026-06-20T04:00:00Z",city:"San Francisco"},
-  {id:59, phase:"group",group:"D",md:3,home:"Türkiye",away:"USA",utc:"2026-06-26T02:00:00Z",city:"Los Angeles"},
-  {id:60, phase:"group",group:"D",md:3,home:"Paraguay",away:"Australia",utc:"2026-06-26T02:00:00Z",city:"San Francisco"},
-
-  // Group E
-  {id:9,  phase:"group",group:"E",md:1,home:"Germany",away:"Curaçao",utc:"2026-06-14T17:00:00Z",city:"Houston"},
-  {id:11, phase:"group",group:"E",md:1,home:"Ivory Coast",away:"Ecuador",utc:"2026-06-14T23:00:00Z",city:"Philadelphia"},
-  {id:34, phase:"group",group:"E",md:2,home:"Germany",away:"Ivory Coast",utc:"2026-06-20T20:00:00Z",city:"Toronto"},
-  {id:35, phase:"group",group:"E",md:2,home:"Curaçao",away:"Ecuador",utc:"2026-06-21T00:00:00Z",city:"Kansas City"},
-  {id:55, phase:"group",group:"E",md:3,home:"Curaçao",away:"Ivory Coast",utc:"2026-06-25T20:00:00Z",city:"Philadelphia"},
-  {id:56, phase:"group",group:"E",md:3,home:"Ecuador",away:"Germany",utc:"2026-06-25T20:00:00Z",city:"New York/NJ"},
-
-  // Group F
-  {id:10, phase:"group",group:"F",md:1,home:"Netherlands",away:"Japan",utc:"2026-06-14T20:00:00Z",city:"Dallas"},
-  {id:12, phase:"group",group:"F",md:1,home:"Sweden",away:"Tunisia",utc:"2026-06-15T02:00:00Z",city:"Monterrey"},
-  {id:33, phase:"group",group:"F",md:2,home:"Netherlands",away:"Sweden",utc:"2026-06-20T17:00:00Z",city:"Houston"},
-  {id:36, phase:"group",group:"F",md:2,home:"Tunisia",away:"Japan",utc:"2026-06-21T04:00:00Z",city:"Monterrey"},
-  {id:57, phase:"group",group:"F",md:3,home:"Tunisia",away:"Netherlands",utc:"2026-06-25T23:00:00Z",city:"Kansas City"},
-  {id:58, phase:"group",group:"F",md:3,home:"Japan",away:"Sweden",utc:"2026-06-25T23:00:00Z",city:"Dallas"},
-
-  // Group G
-  {id:14, phase:"group",group:"G",md:1,home:"Belgium",away:"Egypt",utc:"2026-06-15T22:00:00Z",city:"Seattle"},
-  {id:16, phase:"group",group:"G",md:1,home:"Iran",away:"New Zealand",utc:"2026-06-16T04:00:00Z",city:"Los Angeles"},
-  {id:38, phase:"group",group:"G",md:2,home:"Belgium",away:"Iran",utc:"2026-06-21T19:00:00Z",city:"Los Angeles"},
-  {id:40, phase:"group",group:"G",md:2,home:"New Zealand",away:"Egypt",utc:"2026-06-22T01:00:00Z",city:"Vancouver"},
-  {id:65, phase:"group",group:"G",md:3,home:"New Zealand",away:"Belgium",utc:"2026-06-27T03:00:00Z",city:"Vancouver"},
-  {id:66, phase:"group",group:"G",md:3,home:"Egypt",away:"Iran",utc:"2026-06-27T03:00:00Z",city:"Seattle"},
-
-  // Group H
-  {id:13, phase:"group",group:"H",md:1,home:"Spain",away:"Cape Verde",utc:"2026-06-15T17:00:00Z",city:"Atlanta"},
-  {id:15, phase:"group",group:"H",md:1,home:"Saudi Arabia",away:"Uruguay",utc:"2026-06-15T22:00:00Z",city:"Miami"},
-  {id:37, phase:"group",group:"H",md:2,home:"Spain",away:"Saudi Arabia",utc:"2026-06-21T16:00:00Z",city:"Atlanta"},
-  {id:39, phase:"group",group:"H",md:2,home:"Uruguay",away:"Cape Verde",utc:"2026-06-21T22:00:00Z",city:"Miami"},
-  {id:63, phase:"group",group:"H",md:3,home:"Cape Verde",away:"Saudi Arabia",utc:"2026-06-27T00:00:00Z",city:"Houston"},
-  {id:64, phase:"group",group:"H",md:3,home:"Uruguay",away:"Spain",utc:"2026-06-27T00:00:00Z",city:"Guadalajara"},
-
-  // Group I
-  {id:17, phase:"group",group:"I",md:1,home:"France",away:"Senegal",utc:"2026-06-16T19:00:00Z",city:"New York/NJ"},
-  {id:18, phase:"group",group:"I",md:1,home:"Iraq",away:"Norway",utc:"2026-06-16T22:00:00Z",city:"Boston"},
-  {id:42, phase:"group",group:"I",md:2,home:"France",away:"Iraq",utc:"2026-06-22T21:00:00Z",city:"Philadelphia"},
-  {id:43, phase:"group",group:"I",md:2,home:"Norway",away:"Senegal",utc:"2026-06-23T00:00:00Z",city:"New York/NJ"},
-  {id:61, phase:"group",group:"I",md:3,home:"Norway",away:"France",utc:"2026-06-26T19:00:00Z",city:"Boston"},
-  {id:62, phase:"group",group:"I",md:3,home:"Senegal",away:"Iraq",utc:"2026-06-26T19:00:00Z",city:"Toronto"},
-
-  // Group J
-  {id:19, phase:"group",group:"J",md:1,home:"Argentina",away:"Algeria",utc:"2026-06-17T01:00:00Z",city:"Kansas City"},
-  {id:20, phase:"group",group:"J",md:1,home:"Austria",away:"Jordan",utc:"2026-06-17T04:00:00Z",city:"San Francisco"},
-  {id:41, phase:"group",group:"J",md:2,home:"Argentina",away:"Austria",utc:"2026-06-22T17:00:00Z",city:"Dallas"},
-  {id:44, phase:"group",group:"J",md:2,home:"Jordan",away:"Algeria",utc:"2026-06-23T03:00:00Z",city:"San Francisco"},
-  {id:71, phase:"group",group:"J",md:3,home:"Algeria",away:"Austria",utc:"2026-06-28T02:00:00Z",city:"Kansas City"},
-  {id:72, phase:"group",group:"J",md:3,home:"Jordan",away:"Argentina",utc:"2026-06-28T02:00:00Z",city:"Dallas"},
-
-  // Group K
-  {id:21, phase:"group",group:"K",md:1,home:"Portugal",away:"DR Congo",utc:"2026-06-17T17:00:00Z",city:"Houston"},
-  {id:24, phase:"group",group:"K",md:1,home:"Uzbekistan",away:"Colombia",utc:"2026-06-18T02:00:00Z",city:"Mexico City"},
-  {id:45, phase:"group",group:"K",md:2,home:"Portugal",away:"Uzbekistan",utc:"2026-06-23T17:00:00Z",city:"Houston"},
-  {id:48, phase:"group",group:"K",md:2,home:"Colombia",away:"DR Congo",utc:"2026-06-24T02:00:00Z",city:"Guadalajara"},
-  {id:69, phase:"group",group:"K",md:3,home:"Colombia",away:"Portugal",utc:"2026-06-27T23:30:00Z",city:"Miami"},
-  {id:70, phase:"group",group:"K",md:3,home:"DR Congo",away:"Uzbekistan",utc:"2026-06-27T23:30:00Z",city:"Atlanta"},
-
-  // Group L
-  {id:22, phase:"group",group:"L",md:1,home:"England",away:"Croatia",utc:"2026-06-17T20:00:00Z",city:"Dallas"},
-  {id:23, phase:"group",group:"L",md:1,home:"Ghana",away:"Panama",utc:"2026-06-17T23:00:00Z",city:"Toronto"},
-  {id:46, phase:"group",group:"L",md:2,home:"England",away:"Ghana",utc:"2026-06-23T20:00:00Z",city:"Boston"},
-  {id:47, phase:"group",group:"L",md:2,home:"Panama",away:"Croatia",utc:"2026-06-23T23:00:00Z",city:"Toronto"},
-  {id:67, phase:"group",group:"L",md:3,home:"Panama",away:"England",utc:"2026-06-27T21:00:00Z",city:"New York/NJ"},
-  {id:68, phase:"group",group:"L",md:3,home:"Croatia",away:"Ghana",utc:"2026-06-27T21:00:00Z",city:"Philadelphia"},
-
-  // === ROUND OF 32 ===
-  {id:73, phase:"round32",home:"Runner-up Group A",away:"Runner-up Group B",utc:"2026-06-28T19:00:00Z",city:"Los Angeles"},
-  {id:74, phase:"round32",home:"Winner Group E",away:"3rd Place (A/B/C/D/F)",utc:"2026-06-29T20:30:00Z",city:"Boston"},
-  {id:75, phase:"round32",home:"Winner Group F",away:"Runner-up Group C",utc:"2026-06-30T01:00:00Z",city:"Monterrey"},
-  {id:76, phase:"round32",home:"Winner Group C",away:"Runner-up Group F",utc:"2026-06-29T17:00:00Z",city:"Houston"},
-  {id:77, phase:"round32",home:"Winner Group I",away:"3rd Place (C/D/F/G/H)",utc:"2026-06-30T21:00:00Z",city:"New York/NJ"},
-  {id:78, phase:"round32",home:"Runner-up Group E",away:"Runner-up Group I",utc:"2026-06-30T17:00:00Z",city:"Dallas"},
-  {id:79, phase:"round32",home:"Winner Group A",away:"3rd Place (C/E/F/H/I)",utc:"2026-07-01T01:00:00Z",city:"Mexico City"},
-  {id:80, phase:"round32",home:"Winner Group L",away:"3rd Place (E/H/I/J/K)",utc:"2026-07-01T16:00:00Z",city:"Atlanta"},
-  {id:81, phase:"round32",home:"Winner Group D",away:"3rd Place (B/E/F/I/J)",utc:"2026-07-02T00:00:00Z",city:"San Francisco"},
-  {id:82, phase:"round32",home:"Winner Group G",away:"3rd Place (A/E/H/I/J)",utc:"2026-07-01T20:00:00Z",city:"Seattle"},
-  {id:83, phase:"round32",home:"Runner-up Group K",away:"Runner-up Group L",utc:"2026-07-02T23:00:00Z",city:"Toronto"},
-  {id:84, phase:"round32",home:"Winner Group H",away:"Runner-up Group J",utc:"2026-07-02T19:00:00Z",city:"Los Angeles"},
-  {id:85, phase:"round32",home:"Winner Group B",away:"3rd Place (E/F/G/I/J)",utc:"2026-07-03T03:00:00Z",city:"Vancouver"},
-  {id:86, phase:"round32",home:"Winner Group J",away:"Runner-up Group H",utc:"2026-07-03T22:00:00Z",city:"Miami"},
-  {id:87, phase:"round32",home:"Winner Group K",away:"3rd Place (D/E/I/J/L)",utc:"2026-07-04T01:30:00Z",city:"Kansas City"},
-  {id:88, phase:"round32",home:"Runner-up Group D",away:"Runner-up Group G",utc:"2026-07-03T18:00:00Z",city:"Dallas"},
-
-  // === ROUND OF 16 ===
-  {id:89, phase:"round16",home:"Winner Match 74",away:"Winner Match 77",utc:"2026-07-04T21:00:00Z",city:"Philadelphia"},
-  {id:90, phase:"round16",home:"Winner Match 73",away:"Winner Match 75",utc:"2026-07-04T17:00:00Z",city:"Houston"},
-  {id:91, phase:"round16",home:"Winner Match 76",away:"Winner Match 78",utc:"2026-07-05T20:00:00Z",city:"New York/NJ"},
-  {id:92, phase:"round16",home:"Winner Match 79",away:"Winner Match 80",utc:"2026-07-06T00:00:00Z",city:"Mexico City"},
-  {id:93, phase:"round16",home:"Winner Match 83",away:"Winner Match 84",utc:"2026-07-06T19:00:00Z",city:"Dallas"},
-  {id:94, phase:"round16",home:"Winner Match 81",away:"Winner Match 82",utc:"2026-07-07T00:00:00Z",city:"Seattle"},
-  {id:95, phase:"round16",home:"Winner Match 86",away:"Winner Match 88",utc:"2026-07-07T16:00:00Z",city:"Atlanta"},
-  {id:96, phase:"round16",home:"Winner Match 85",away:"Winner Match 87",utc:"2026-07-07T20:00:00Z",city:"Vancouver"},
-
-  // === QUARTER-FINALS ===
-  {id:97, phase:"quarter",home:"Winner Match 89",away:"Winner Match 90",utc:"2026-07-09T20:00:00Z",city:"Boston"},
-  {id:98, phase:"quarter",home:"Winner Match 93",away:"Winner Match 94",utc:"2026-07-10T19:00:00Z",city:"Los Angeles"},
-  {id:99, phase:"quarter",home:"Winner Match 91",away:"Winner Match 92",utc:"2026-07-11T21:00:00Z",city:"Miami"},
-  {id:100,phase:"quarter",home:"Winner Match 95",away:"Winner Match 96",utc:"2026-07-12T01:00:00Z",city:"Kansas City"},
-
-  // === SEMI-FINALS ===
-  {id:101,phase:"semi",home:"Winner Match 97",away:"Winner Match 98",utc:"2026-07-14T19:00:00Z",city:"Dallas"},
-  {id:102,phase:"semi",home:"Winner Match 99",away:"Winner Match 100",utc:"2026-07-15T19:00:00Z",city:"Atlanta"},
-
-  // === THIRD PLACE ===
-  {id:103,phase:"third",home:"Loser Match 101",away:"Loser Match 102",utc:"2026-07-18T21:00:00Z",city:"Miami"},
-
-  // === FINAL ===
-  {id:104,phase:"final",home:"Winner Match 101",away:"Winner Match 102",utc:"2026-07-19T19:00:00Z",city:"New York/NJ"},
-];
+// Reference data loaded from data.json (see loadData)
+let VENUES = {}, FLAGS = {}, GROUPS = {}, MATCHES = [];
 
 // ============================
 // SCORES — SEPARATE OVERLAY (keyed by match id)
 // MATCHES array above stays untouched. Only results live here.
 // status: "NS" not started | "LIVE" | "FT" full time.
 // These hardcoded values are the FALLBACK shown instantly on load;
-// fetchScores() (TheSportsDB) overwrites them with live data after paint.
+// loadScores() overwrites them from scores.json after paint.
 // ============================
 let SCORES = {
   1: {home:2, away:0, status:"FT"}, // Mexico 2-0 South Africa
@@ -335,15 +138,6 @@ function fmt(date, tz, style="time") {
   if (style === "date") {
     return d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",timeZone:tz});
   }
-  if (style === "day") {
-    return d.toLocaleDateString("en-GB",{day:"numeric",timeZone:tz});
-  }
-  if (style === "month") {
-    return d.toLocaleDateString("en-GB",{month:"short",timeZone:tz});
-  }
-  if (style === "weekday") {
-    return d.toLocaleDateString("en-GB",{weekday:"long",timeZone:tz}).toUpperCase();
-  }
   if (style === "datekey") {
     return d.toLocaleDateString("en-CA",{timeZone:tz}); // YYYY-MM-DD
   }
@@ -372,22 +166,9 @@ function isUpcoming(utc) {
   return new Date(utc).getTime() > Date.now();
 }
 
-function getTeams(m) {
-  const teams = [];
-  if (FLAGS[m.home]) teams.push(m.home);
-  if (FLAGS[m.away]) teams.push(m.away);
-  return teams;
-}
-
 function allTeamsSorted() {
   const s = new Set();
   MATCHES.forEach(m => { if(FLAGS[m.home]) s.add(m.home); if(FLAGS[m.away]) s.add(m.away); });
-  return [...s].sort();
-}
-
-function allVenuesSorted() {
-  const s = new Set();
-  MATCHES.forEach(m => s.add(m.city));
   return [...s].sort();
 }
 
@@ -430,24 +211,18 @@ function filterMatches() {
 // ============================
 // RENDER MATCH CARD
 // ============================
-function renderMatchCard(m, highlight) {
+function renderMatchCard(m) {
   const v = VENUES[m.city];
   const live = isLive(m.utc);
   const today = isToday(m.utc, TRT);
-  const upcoming = !live && isUpcoming(m.utc);
-  const isHL = highlight && (m.home === highlight || m.away === highlight);
 
   // Find first upcoming match
   const nextMatch = MATCHES.filter(x => isUpcoming(x.utc)).sort((a,b) => new Date(a.utc)-new Date(b.utc))[0];
   const isNext = nextMatch && m.id === nextMatch.id;
 
   let cardClass = "match-card bg-white border rounded-xl p-4 md:p-5 flex flex-col md:flex-row gap-4 items-start md:items-center";
-  if (isHL) cardClass += " highlighted";
   if (live) cardClass += " is-live";
   else if (today) cardClass += " is-today";
-
-  const homeHL = highlight === m.home ? "bg-amber-100 rounded px-1" : "";
-  const awayHL = highlight === m.away ? "bg-amber-100 rounded px-1" : "";
 
   // Phase label
   let phaseLabel = "";
@@ -485,13 +260,13 @@ function renderMatchCard(m, highlight) {
 
     <!-- Teams -->
     <div class="flex-1 min-w-[200px]">
-      <div class="flex items-center gap-2 text-base font-medium ${homeHL} ${homeWin}">
+      <div class="flex items-center gap-2 text-base font-medium ${homeWin}">
         <span class="text-xl">${flag(m.home)}</span>
         <span>${m.home}</span>
         ${homeScore}
       </div>
       <div class="text-xs text-gray-400 my-0.5 ml-8">v</div>
-      <div class="flex items-center gap-2 text-base font-medium ${awayHL} ${awayWin}">
+      <div class="flex items-center gap-2 text-base font-medium ${awayWin}">
         <span class="text-xl">${flag(m.away)}</span>
         <span>${m.away}</span>
         ${awayScore}
@@ -522,7 +297,7 @@ function renderMatchCard(m, highlight) {
 // ============================
 // DAY VIEW
 // ============================
-function renderDayView(matches, highlight) {
+function renderDayView(matches) {
   // Group by local venue date
   const byDay = {};
   matches.forEach(m => {
@@ -556,7 +331,7 @@ function renderDayView(matches, highlight) {
       </div>
       <!-- Matches -->
       <div class="flex-1 flex flex-col gap-3">
-        ${dayMatches.map(m => renderMatchCard(m, highlight)).join("")}
+        ${dayMatches.map(m => renderMatchCard(m)).join("")}
       </div>
     </div>`;
   });
@@ -567,7 +342,7 @@ function renderDayView(matches, highlight) {
 // ============================
 // PHASE VIEW
 // ============================
-function renderPhaseView(matches, highlight) {
+function renderPhaseView(matches) {
   let html = "";
 
   // Group stage — by group
@@ -587,7 +362,7 @@ function renderPhaseView(matches, highlight) {
           </div>
         </div>
         <div class="flex flex-col gap-3">
-          ${gm.map(m => renderMatchCard(m, highlight)).join("")}
+          ${gm.map(m => renderMatchCard(m)).join("")}
         </div>
       </div>`;
     });
@@ -600,7 +375,7 @@ function renderPhaseView(matches, highlight) {
     html += `
     <h2 class="text-2xl font-bold mb-4 mt-10 font-serif">${PHASE_LABELS[phase]}</h2>
     <div class="flex flex-col gap-3 mb-8">
-      ${pm.map(m => renderMatchCard(m, highlight)).join("")}
+      ${pm.map(m => renderMatchCard(m)).join("")}
     </div>`;
   });
 
@@ -612,14 +387,13 @@ function renderPhaseView(matches, highlight) {
 // ============================
 function render() {
   const matches = filterMatches();
-  const f = getFilters();
   document.getElementById("matchCount").textContent = `${matches.length} of ${MATCHES.length} matches`;
 
   const content = document.getElementById("content");
   if (state.view === "day") {
-    content.innerHTML = renderDayView(matches, null);
+    content.innerHTML = renderDayView(matches);
   } else {
-    content.innerHTML = renderPhaseView(matches, null);
+    content.innerHTML = renderPhaseView(matches);
   }
 }
 
@@ -670,76 +444,67 @@ function updateClocks() {
 }
 
 // ============================
-// LIVE SCORES — TheSportsDB (free, no key, browser-direct)
-// League 4429 = FIFA World Cup, season 2026.
+// SCORES — loaded from scores.json (updated by a separate process)
 // Writes into SCORES overlay only; MATCHES untouched.
+// scores.json shape: { "<matchId>": {home:Int, away:Int, status:"NS"|"LIVE"|"FT"}, ... }
 // ============================
-const SCORES_API = "https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4429&s=2026";
-
-// API team name -> site team name (only where they differ)
-const TEAM_ALIAS = {
-  "Czech Republic": "Czechia",
-  "Bosnia-Herzegovina": "Bosnia and Herzegovina",
-  "Turkey": "Türkiye",
-  "Republic of Ireland": "Ireland",
-  "South Korea": "South Korea",
-  "Ivory Coast": "Ivory Coast",
-  "DR Congo": "DR Congo",
-  "Curacao": "Curaçao",
-};
-function aliasTeam(name) { return TEAM_ALIAS[name] || name; }
-
-// Index MATCHES by "home|away" (site names) for quick lookup
-const MATCH_INDEX = {};
-MATCHES.forEach(m => { MATCH_INDEX[`${m.home}|${m.away}`] = m; });
-
-function mapEventStatus(e) {
-  const s = (e.strStatus || "").toLowerCase();
-  if (s.includes("ft") || s.includes("finish") || s.includes("aet") || s.includes("pen")) return "FT";
-  if (e.strProgress || s.includes("1h") || s.includes("2h") || s.includes("ht") || s.includes("live")) return "LIVE";
-  return null; // not started / unknown -> ignore
-}
+const SCORES_URL = "scores.json";
 
 function setSyncStatus(text) {
   const el = document.getElementById("scoreSync");
   if (el) el.innerHTML = text;
 }
 
-async function fetchScores() {
-  setSyncStatus(`<span class="inline-block animate-spin">↻</span> syncing scores…`);
+async function loadScores() {
+  setSyncStatus(`<span class="inline-block animate-spin">↻</span> loading scores…`);
   try {
-    const res = await fetch(SCORES_API, { cache: "no-store" });
+    const res = await fetch(SCORES_URL, { cache: "no-store" });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const data = await res.json();
-    const events = (data && data.events) || [];
-    const next = {};
-    events.forEach(e => {
-      const hs = e.intHomeScore, as = e.intAwayScore;
-      if (hs == null || as == null) return; // no score yet
-      const status = mapEventStatus(e);
-      if (!status) return;
-      const home = aliasTeam(e.strHomeTeam), away = aliasTeam(e.strAwayTeam);
-      let m = MATCH_INDEX[`${home}|${away}`];
-      if (m) { next[m.id] = { home:+hs, away:+as, status }; return; }
-      // try swapped order -> flip scores
-      m = MATCH_INDEX[`${away}|${home}`];
-      if (m) { next[m.id] = { home:+as, away:+hs, status }; }
-    });
-    // Merge over hardcoded fallback (API wins where present)
-    SCORES = Object.assign({}, SCORES, next);
+    // Merge over hardcoded fallback (file wins where present)
+    SCORES = Object.assign({}, SCORES, data);
     render();
-    const liveCount = Object.values(next).filter(s => s.status === "LIVE").length;
+    const liveCount = Object.values(data).filter(s => s && s.status === "LIVE").length;
     setSyncStatus(liveCount ? `🟢 ${liveCount} live` : `✓ scores updated`);
   } catch (err) {
     setSyncStatus(`⚠ scores offline (showing saved)`);
-    console.warn("score sync failed:", err);
+    console.warn("score load failed:", err);
   }
+}
+
+// ============================
+// REFERENCE DATA — loaded from data.json (venues, flags, groups, matches)
+// ============================
+const DATA_URL = "data.json";
+
+async function loadData() {
+  const res = await fetch(DATA_URL, { cache: "no-store" });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const d = await res.json();
+  VENUES = d.venues || {};
+  FLAGS  = d.flags  || {};
+  GROUPS = d.groups || {};
+  MATCHES = d.matches || [];
 }
 
 // ============================
 // INIT
 // ============================
-function init() {
+async function init() {
+  // Clocks can start immediately
+  updateClocks();
+  setInterval(updateClocks, 1000);
+
+  // Reference data must load before first render
+  try {
+    await loadData();
+  } catch (err) {
+    document.getElementById("content").innerHTML =
+      `<div class="text-center text-trt py-16 text-sm">Failed to load data.json — ${err.message}</div>`;
+    console.error("data load failed:", err);
+    return;
+  }
+
   // Populate team autocomplete
   const teams = allTeamsSorted();
   const dl = document.getElementById("teamOptions");
@@ -753,12 +518,10 @@ function init() {
     daySel.max = days[days.length - 1];
   }
 
-  updateClocks();
-  setInterval(updateClocks, 1000);
-  render();              // instant paint from hardcoded fallback
+  render();              // paint from data.json + hardcoded score fallback
 
-  fetchScores();         // async overwrite with live data (after paint)
-  setInterval(fetchScores, 60000); // refresh every 60s for live matches
+  loadScores();          // async overwrite from scores.json (after paint)
+  setInterval(loadScores, 60000); // re-read file every 60s for live matches
 }
 
 init();

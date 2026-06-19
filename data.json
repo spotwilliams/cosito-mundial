@@ -1,0 +1,1170 @@
+{
+  "venues": {
+    "Mexico City": {
+      "stadium": "Estadio Azteca",
+      "tz": "America/Mexico_City"
+    },
+    "Guadalajara": {
+      "stadium": "Estadio Akron",
+      "tz": "America/Mexico_City"
+    },
+    "Monterrey": {
+      "stadium": "Estadio BBVA",
+      "tz": "America/Monterrey"
+    },
+    "Toronto": {
+      "stadium": "BMO Field",
+      "tz": "America/Toronto"
+    },
+    "Vancouver": {
+      "stadium": "BC Place",
+      "tz": "America/Vancouver"
+    },
+    "Los Angeles": {
+      "stadium": "SoFi Stadium",
+      "tz": "America/Los_Angeles"
+    },
+    "San Francisco": {
+      "stadium": "Levi's Stadium",
+      "tz": "America/Los_Angeles"
+    },
+    "New York/NJ": {
+      "stadium": "MetLife Stadium",
+      "tz": "America/New_York"
+    },
+    "Boston": {
+      "stadium": "Gillette Stadium",
+      "tz": "America/New_York"
+    },
+    "Philadelphia": {
+      "stadium": "Lincoln Financial Field",
+      "tz": "America/New_York"
+    },
+    "Houston": {
+      "stadium": "NRG Stadium",
+      "tz": "America/Chicago"
+    },
+    "Dallas": {
+      "stadium": "AT&T Stadium",
+      "tz": "America/Chicago"
+    },
+    "Atlanta": {
+      "stadium": "Mercedes-Benz Stadium",
+      "tz": "America/New_York"
+    },
+    "Seattle": {
+      "stadium": "Lumen Field",
+      "tz": "America/Los_Angeles"
+    },
+    "Miami": {
+      "stadium": "Hard Rock Stadium",
+      "tz": "America/New_York"
+    },
+    "Kansas City": {
+      "stadium": "GEHA Field at Arrowhead",
+      "tz": "America/Chicago"
+    }
+  },
+  "flags": {
+    "Mexico": "🇲🇽",
+    "South Africa": "🇿🇦",
+    "South Korea": "🇰🇷",
+    "Czechia": "🇨🇿",
+    "Canada": "🇨🇦",
+    "Bosnia and Herzegovina": "🇧🇦",
+    "Qatar": "🇶🇦",
+    "Switzerland": "🇨🇭",
+    "Brazil": "🇧🇷",
+    "Morocco": "🇲🇦",
+    "Haiti": "🇭🇹",
+    "Scotland": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+    "USA": "🇺🇸",
+    "Paraguay": "🇵🇾",
+    "Australia": "🇦🇺",
+    "Türkiye": "🇹🇷",
+    "Germany": "🇩🇪",
+    "Ivory Coast": "🇨🇮",
+    "Ecuador": "🇪🇨",
+    "Curaçao": "🇨🇼",
+    "Netherlands": "🇳🇱",
+    "Sweden": "🇸🇪",
+    "Tunisia": "🇹🇳",
+    "Japan": "🇯🇵",
+    "Belgium": "🇧🇪",
+    "Egypt": "🇪🇬",
+    "Iran": "🇮🇷",
+    "New Zealand": "🇳🇿",
+    "Spain": "🇪🇸",
+    "Cape Verde": "🇨🇻",
+    "Saudi Arabia": "🇸🇦",
+    "Uruguay": "🇺🇾",
+    "France": "🇫🇷",
+    "Senegal": "🇸🇳",
+    "Iraq": "🇮🇶",
+    "Norway": "🇳🇴",
+    "Argentina": "🇦🇷",
+    "Algeria": "🇩🇿",
+    "Austria": "🇦🇹",
+    "Jordan": "🇯🇴",
+    "Portugal": "🇵🇹",
+    "DR Congo": "🇨🇩",
+    "Uzbekistan": "🇺🇿",
+    "Colombia": "🇨🇴",
+    "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "Croatia": "🇭🇷",
+    "Ghana": "🇬🇭",
+    "Panama": "🇵🇦"
+  },
+  "groups": {
+    "A": [
+      "Mexico",
+      "South Africa",
+      "South Korea",
+      "Czechia"
+    ],
+    "B": [
+      "Canada",
+      "Bosnia and Herzegovina",
+      "Qatar",
+      "Switzerland"
+    ],
+    "C": [
+      "Brazil",
+      "Morocco",
+      "Haiti",
+      "Scotland"
+    ],
+    "D": [
+      "USA",
+      "Paraguay",
+      "Australia",
+      "Türkiye"
+    ],
+    "E": [
+      "Germany",
+      "Ivory Coast",
+      "Ecuador",
+      "Curaçao"
+    ],
+    "F": [
+      "Netherlands",
+      "Sweden",
+      "Tunisia",
+      "Japan"
+    ],
+    "G": [
+      "Belgium",
+      "Egypt",
+      "Iran",
+      "New Zealand"
+    ],
+    "H": [
+      "Spain",
+      "Cape Verde",
+      "Saudi Arabia",
+      "Uruguay"
+    ],
+    "I": [
+      "France",
+      "Senegal",
+      "Iraq",
+      "Norway"
+    ],
+    "J": [
+      "Argentina",
+      "Algeria",
+      "Austria",
+      "Jordan"
+    ],
+    "K": [
+      "Portugal",
+      "DR Congo",
+      "Uzbekistan",
+      "Colombia"
+    ],
+    "L": [
+      "England",
+      "Croatia",
+      "Ghana",
+      "Panama"
+    ]
+  },
+  "matches": [
+    {
+      "id": 1,
+      "phase": "group",
+      "group": "A",
+      "md": 1,
+      "home": "Mexico",
+      "away": "South Africa",
+      "utc": "2026-06-11T19:00:00Z",
+      "city": "Mexico City"
+    },
+    {
+      "id": 2,
+      "phase": "group",
+      "group": "A",
+      "md": 1,
+      "home": "South Korea",
+      "away": "Czechia",
+      "utc": "2026-06-12T02:00:00Z",
+      "city": "Guadalajara"
+    },
+    {
+      "id": 25,
+      "phase": "group",
+      "group": "A",
+      "md": 2,
+      "home": "Czechia",
+      "away": "South Africa",
+      "utc": "2026-06-18T16:00:00Z",
+      "city": "Atlanta"
+    },
+    {
+      "id": 28,
+      "phase": "group",
+      "group": "A",
+      "md": 2,
+      "home": "Mexico",
+      "away": "South Korea",
+      "utc": "2026-06-19T03:00:00Z",
+      "city": "Guadalajara"
+    },
+    {
+      "id": 53,
+      "phase": "group",
+      "group": "A",
+      "md": 3,
+      "home": "South Africa",
+      "away": "South Korea",
+      "utc": "2026-06-25T01:00:00Z",
+      "city": "Guadalajara"
+    },
+    {
+      "id": 54,
+      "phase": "group",
+      "group": "A",
+      "md": 3,
+      "home": "Czechia",
+      "away": "Mexico",
+      "utc": "2026-06-25T01:00:00Z",
+      "city": "Mexico City"
+    },
+    {
+      "id": 3,
+      "phase": "group",
+      "group": "B",
+      "md": 1,
+      "home": "Canada",
+      "away": "Bosnia and Herzegovina",
+      "utc": "2026-06-12T19:00:00Z",
+      "city": "Toronto"
+    },
+    {
+      "id": 5,
+      "phase": "group",
+      "group": "B",
+      "md": 1,
+      "home": "Qatar",
+      "away": "Switzerland",
+      "utc": "2026-06-13T19:00:00Z",
+      "city": "San Francisco"
+    },
+    {
+      "id": 26,
+      "phase": "group",
+      "group": "B",
+      "md": 2,
+      "home": "Switzerland",
+      "away": "Bosnia and Herzegovina",
+      "utc": "2026-06-18T19:00:00Z",
+      "city": "Los Angeles"
+    },
+    {
+      "id": 27,
+      "phase": "group",
+      "group": "B",
+      "md": 2,
+      "home": "Canada",
+      "away": "Qatar",
+      "utc": "2026-06-18T22:00:00Z",
+      "city": "Vancouver"
+    },
+    {
+      "id": 49,
+      "phase": "group",
+      "group": "B",
+      "md": 3,
+      "home": "Switzerland",
+      "away": "Canada",
+      "utc": "2026-06-24T19:00:00Z",
+      "city": "Vancouver"
+    },
+    {
+      "id": 50,
+      "phase": "group",
+      "group": "B",
+      "md": 3,
+      "home": "Bosnia and Herzegovina",
+      "away": "Qatar",
+      "utc": "2026-06-24T19:00:00Z",
+      "city": "Seattle"
+    },
+    {
+      "id": 6,
+      "phase": "group",
+      "group": "C",
+      "md": 1,
+      "home": "Brazil",
+      "away": "Morocco",
+      "utc": "2026-06-13T22:00:00Z",
+      "city": "New York/NJ"
+    },
+    {
+      "id": 7,
+      "phase": "group",
+      "group": "C",
+      "md": 1,
+      "home": "Haiti",
+      "away": "Scotland",
+      "utc": "2026-06-14T01:00:00Z",
+      "city": "Boston"
+    },
+    {
+      "id": 30,
+      "phase": "group",
+      "group": "C",
+      "md": 2,
+      "home": "Scotland",
+      "away": "Morocco",
+      "utc": "2026-06-19T22:00:00Z",
+      "city": "Boston"
+    },
+    {
+      "id": 31,
+      "phase": "group",
+      "group": "C",
+      "md": 2,
+      "home": "Brazil",
+      "away": "Haiti",
+      "utc": "2026-06-20T01:00:00Z",
+      "city": "Philadelphia"
+    },
+    {
+      "id": 51,
+      "phase": "group",
+      "group": "C",
+      "md": 3,
+      "home": "Morocco",
+      "away": "Haiti",
+      "utc": "2026-06-24T22:00:00Z",
+      "city": "Atlanta"
+    },
+    {
+      "id": 52,
+      "phase": "group",
+      "group": "C",
+      "md": 3,
+      "home": "Scotland",
+      "away": "Brazil",
+      "utc": "2026-06-24T22:00:00Z",
+      "city": "Miami"
+    },
+    {
+      "id": 4,
+      "phase": "group",
+      "group": "D",
+      "md": 1,
+      "home": "USA",
+      "away": "Paraguay",
+      "utc": "2026-06-13T01:00:00Z",
+      "city": "Los Angeles"
+    },
+    {
+      "id": 8,
+      "phase": "group",
+      "group": "D",
+      "md": 1,
+      "home": "Australia",
+      "away": "Türkiye",
+      "utc": "2026-06-14T04:00:00Z",
+      "city": "Vancouver"
+    },
+    {
+      "id": 29,
+      "phase": "group",
+      "group": "D",
+      "md": 2,
+      "home": "USA",
+      "away": "Australia",
+      "utc": "2026-06-19T19:00:00Z",
+      "city": "Seattle"
+    },
+    {
+      "id": 32,
+      "phase": "group",
+      "group": "D",
+      "md": 2,
+      "home": "Türkiye",
+      "away": "Paraguay",
+      "utc": "2026-06-20T04:00:00Z",
+      "city": "San Francisco"
+    },
+    {
+      "id": 59,
+      "phase": "group",
+      "group": "D",
+      "md": 3,
+      "home": "Türkiye",
+      "away": "USA",
+      "utc": "2026-06-26T02:00:00Z",
+      "city": "Los Angeles"
+    },
+    {
+      "id": 60,
+      "phase": "group",
+      "group": "D",
+      "md": 3,
+      "home": "Paraguay",
+      "away": "Australia",
+      "utc": "2026-06-26T02:00:00Z",
+      "city": "San Francisco"
+    },
+    {
+      "id": 9,
+      "phase": "group",
+      "group": "E",
+      "md": 1,
+      "home": "Germany",
+      "away": "Curaçao",
+      "utc": "2026-06-14T17:00:00Z",
+      "city": "Houston"
+    },
+    {
+      "id": 11,
+      "phase": "group",
+      "group": "E",
+      "md": 1,
+      "home": "Ivory Coast",
+      "away": "Ecuador",
+      "utc": "2026-06-14T23:00:00Z",
+      "city": "Philadelphia"
+    },
+    {
+      "id": 34,
+      "phase": "group",
+      "group": "E",
+      "md": 2,
+      "home": "Germany",
+      "away": "Ivory Coast",
+      "utc": "2026-06-20T20:00:00Z",
+      "city": "Toronto"
+    },
+    {
+      "id": 35,
+      "phase": "group",
+      "group": "E",
+      "md": 2,
+      "home": "Curaçao",
+      "away": "Ecuador",
+      "utc": "2026-06-21T00:00:00Z",
+      "city": "Kansas City"
+    },
+    {
+      "id": 55,
+      "phase": "group",
+      "group": "E",
+      "md": 3,
+      "home": "Curaçao",
+      "away": "Ivory Coast",
+      "utc": "2026-06-25T20:00:00Z",
+      "city": "Philadelphia"
+    },
+    {
+      "id": 56,
+      "phase": "group",
+      "group": "E",
+      "md": 3,
+      "home": "Ecuador",
+      "away": "Germany",
+      "utc": "2026-06-25T20:00:00Z",
+      "city": "New York/NJ"
+    },
+    {
+      "id": 10,
+      "phase": "group",
+      "group": "F",
+      "md": 1,
+      "home": "Netherlands",
+      "away": "Japan",
+      "utc": "2026-06-14T20:00:00Z",
+      "city": "Dallas"
+    },
+    {
+      "id": 12,
+      "phase": "group",
+      "group": "F",
+      "md": 1,
+      "home": "Sweden",
+      "away": "Tunisia",
+      "utc": "2026-06-15T02:00:00Z",
+      "city": "Monterrey"
+    },
+    {
+      "id": 33,
+      "phase": "group",
+      "group": "F",
+      "md": 2,
+      "home": "Netherlands",
+      "away": "Sweden",
+      "utc": "2026-06-20T17:00:00Z",
+      "city": "Houston"
+    },
+    {
+      "id": 36,
+      "phase": "group",
+      "group": "F",
+      "md": 2,
+      "home": "Tunisia",
+      "away": "Japan",
+      "utc": "2026-06-21T04:00:00Z",
+      "city": "Monterrey"
+    },
+    {
+      "id": 57,
+      "phase": "group",
+      "group": "F",
+      "md": 3,
+      "home": "Tunisia",
+      "away": "Netherlands",
+      "utc": "2026-06-25T23:00:00Z",
+      "city": "Kansas City"
+    },
+    {
+      "id": 58,
+      "phase": "group",
+      "group": "F",
+      "md": 3,
+      "home": "Japan",
+      "away": "Sweden",
+      "utc": "2026-06-25T23:00:00Z",
+      "city": "Dallas"
+    },
+    {
+      "id": 14,
+      "phase": "group",
+      "group": "G",
+      "md": 1,
+      "home": "Belgium",
+      "away": "Egypt",
+      "utc": "2026-06-15T22:00:00Z",
+      "city": "Seattle"
+    },
+    {
+      "id": 16,
+      "phase": "group",
+      "group": "G",
+      "md": 1,
+      "home": "Iran",
+      "away": "New Zealand",
+      "utc": "2026-06-16T04:00:00Z",
+      "city": "Los Angeles"
+    },
+    {
+      "id": 38,
+      "phase": "group",
+      "group": "G",
+      "md": 2,
+      "home": "Belgium",
+      "away": "Iran",
+      "utc": "2026-06-21T19:00:00Z",
+      "city": "Los Angeles"
+    },
+    {
+      "id": 40,
+      "phase": "group",
+      "group": "G",
+      "md": 2,
+      "home": "New Zealand",
+      "away": "Egypt",
+      "utc": "2026-06-22T01:00:00Z",
+      "city": "Vancouver"
+    },
+    {
+      "id": 65,
+      "phase": "group",
+      "group": "G",
+      "md": 3,
+      "home": "New Zealand",
+      "away": "Belgium",
+      "utc": "2026-06-27T03:00:00Z",
+      "city": "Vancouver"
+    },
+    {
+      "id": 66,
+      "phase": "group",
+      "group": "G",
+      "md": 3,
+      "home": "Egypt",
+      "away": "Iran",
+      "utc": "2026-06-27T03:00:00Z",
+      "city": "Seattle"
+    },
+    {
+      "id": 13,
+      "phase": "group",
+      "group": "H",
+      "md": 1,
+      "home": "Spain",
+      "away": "Cape Verde",
+      "utc": "2026-06-15T17:00:00Z",
+      "city": "Atlanta"
+    },
+    {
+      "id": 15,
+      "phase": "group",
+      "group": "H",
+      "md": 1,
+      "home": "Saudi Arabia",
+      "away": "Uruguay",
+      "utc": "2026-06-15T22:00:00Z",
+      "city": "Miami"
+    },
+    {
+      "id": 37,
+      "phase": "group",
+      "group": "H",
+      "md": 2,
+      "home": "Spain",
+      "away": "Saudi Arabia",
+      "utc": "2026-06-21T16:00:00Z",
+      "city": "Atlanta"
+    },
+    {
+      "id": 39,
+      "phase": "group",
+      "group": "H",
+      "md": 2,
+      "home": "Uruguay",
+      "away": "Cape Verde",
+      "utc": "2026-06-21T22:00:00Z",
+      "city": "Miami"
+    },
+    {
+      "id": 63,
+      "phase": "group",
+      "group": "H",
+      "md": 3,
+      "home": "Cape Verde",
+      "away": "Saudi Arabia",
+      "utc": "2026-06-27T00:00:00Z",
+      "city": "Houston"
+    },
+    {
+      "id": 64,
+      "phase": "group",
+      "group": "H",
+      "md": 3,
+      "home": "Uruguay",
+      "away": "Spain",
+      "utc": "2026-06-27T00:00:00Z",
+      "city": "Guadalajara"
+    },
+    {
+      "id": 17,
+      "phase": "group",
+      "group": "I",
+      "md": 1,
+      "home": "France",
+      "away": "Senegal",
+      "utc": "2026-06-16T19:00:00Z",
+      "city": "New York/NJ"
+    },
+    {
+      "id": 18,
+      "phase": "group",
+      "group": "I",
+      "md": 1,
+      "home": "Iraq",
+      "away": "Norway",
+      "utc": "2026-06-16T22:00:00Z",
+      "city": "Boston"
+    },
+    {
+      "id": 42,
+      "phase": "group",
+      "group": "I",
+      "md": 2,
+      "home": "France",
+      "away": "Iraq",
+      "utc": "2026-06-22T21:00:00Z",
+      "city": "Philadelphia"
+    },
+    {
+      "id": 43,
+      "phase": "group",
+      "group": "I",
+      "md": 2,
+      "home": "Norway",
+      "away": "Senegal",
+      "utc": "2026-06-23T00:00:00Z",
+      "city": "New York/NJ"
+    },
+    {
+      "id": 61,
+      "phase": "group",
+      "group": "I",
+      "md": 3,
+      "home": "Norway",
+      "away": "France",
+      "utc": "2026-06-26T19:00:00Z",
+      "city": "Boston"
+    },
+    {
+      "id": 62,
+      "phase": "group",
+      "group": "I",
+      "md": 3,
+      "home": "Senegal",
+      "away": "Iraq",
+      "utc": "2026-06-26T19:00:00Z",
+      "city": "Toronto"
+    },
+    {
+      "id": 19,
+      "phase": "group",
+      "group": "J",
+      "md": 1,
+      "home": "Argentina",
+      "away": "Algeria",
+      "utc": "2026-06-17T01:00:00Z",
+      "city": "Kansas City"
+    },
+    {
+      "id": 20,
+      "phase": "group",
+      "group": "J",
+      "md": 1,
+      "home": "Austria",
+      "away": "Jordan",
+      "utc": "2026-06-17T04:00:00Z",
+      "city": "San Francisco"
+    },
+    {
+      "id": 41,
+      "phase": "group",
+      "group": "J",
+      "md": 2,
+      "home": "Argentina",
+      "away": "Austria",
+      "utc": "2026-06-22T17:00:00Z",
+      "city": "Dallas"
+    },
+    {
+      "id": 44,
+      "phase": "group",
+      "group": "J",
+      "md": 2,
+      "home": "Jordan",
+      "away": "Algeria",
+      "utc": "2026-06-23T03:00:00Z",
+      "city": "San Francisco"
+    },
+    {
+      "id": 71,
+      "phase": "group",
+      "group": "J",
+      "md": 3,
+      "home": "Algeria",
+      "away": "Austria",
+      "utc": "2026-06-28T02:00:00Z",
+      "city": "Kansas City"
+    },
+    {
+      "id": 72,
+      "phase": "group",
+      "group": "J",
+      "md": 3,
+      "home": "Jordan",
+      "away": "Argentina",
+      "utc": "2026-06-28T02:00:00Z",
+      "city": "Dallas"
+    },
+    {
+      "id": 21,
+      "phase": "group",
+      "group": "K",
+      "md": 1,
+      "home": "Portugal",
+      "away": "DR Congo",
+      "utc": "2026-06-17T17:00:00Z",
+      "city": "Houston"
+    },
+    {
+      "id": 24,
+      "phase": "group",
+      "group": "K",
+      "md": 1,
+      "home": "Uzbekistan",
+      "away": "Colombia",
+      "utc": "2026-06-18T02:00:00Z",
+      "city": "Mexico City"
+    },
+    {
+      "id": 45,
+      "phase": "group",
+      "group": "K",
+      "md": 2,
+      "home": "Portugal",
+      "away": "Uzbekistan",
+      "utc": "2026-06-23T17:00:00Z",
+      "city": "Houston"
+    },
+    {
+      "id": 48,
+      "phase": "group",
+      "group": "K",
+      "md": 2,
+      "home": "Colombia",
+      "away": "DR Congo",
+      "utc": "2026-06-24T02:00:00Z",
+      "city": "Guadalajara"
+    },
+    {
+      "id": 69,
+      "phase": "group",
+      "group": "K",
+      "md": 3,
+      "home": "Colombia",
+      "away": "Portugal",
+      "utc": "2026-06-27T23:30:00Z",
+      "city": "Miami"
+    },
+    {
+      "id": 70,
+      "phase": "group",
+      "group": "K",
+      "md": 3,
+      "home": "DR Congo",
+      "away": "Uzbekistan",
+      "utc": "2026-06-27T23:30:00Z",
+      "city": "Atlanta"
+    },
+    {
+      "id": 22,
+      "phase": "group",
+      "group": "L",
+      "md": 1,
+      "home": "England",
+      "away": "Croatia",
+      "utc": "2026-06-17T20:00:00Z",
+      "city": "Dallas"
+    },
+    {
+      "id": 23,
+      "phase": "group",
+      "group": "L",
+      "md": 1,
+      "home": "Ghana",
+      "away": "Panama",
+      "utc": "2026-06-17T23:00:00Z",
+      "city": "Toronto"
+    },
+    {
+      "id": 46,
+      "phase": "group",
+      "group": "L",
+      "md": 2,
+      "home": "England",
+      "away": "Ghana",
+      "utc": "2026-06-23T20:00:00Z",
+      "city": "Boston"
+    },
+    {
+      "id": 47,
+      "phase": "group",
+      "group": "L",
+      "md": 2,
+      "home": "Panama",
+      "away": "Croatia",
+      "utc": "2026-06-23T23:00:00Z",
+      "city": "Toronto"
+    },
+    {
+      "id": 67,
+      "phase": "group",
+      "group": "L",
+      "md": 3,
+      "home": "Panama",
+      "away": "England",
+      "utc": "2026-06-27T21:00:00Z",
+      "city": "New York/NJ"
+    },
+    {
+      "id": 68,
+      "phase": "group",
+      "group": "L",
+      "md": 3,
+      "home": "Croatia",
+      "away": "Ghana",
+      "utc": "2026-06-27T21:00:00Z",
+      "city": "Philadelphia"
+    },
+    {
+      "id": 73,
+      "phase": "round32",
+      "home": "Runner-up Group A",
+      "away": "Runner-up Group B",
+      "utc": "2026-06-28T19:00:00Z",
+      "city": "Los Angeles"
+    },
+    {
+      "id": 74,
+      "phase": "round32",
+      "home": "Winner Group E",
+      "away": "3rd Place (A/B/C/D/F)",
+      "utc": "2026-06-29T20:30:00Z",
+      "city": "Boston"
+    },
+    {
+      "id": 75,
+      "phase": "round32",
+      "home": "Winner Group F",
+      "away": "Runner-up Group C",
+      "utc": "2026-06-30T01:00:00Z",
+      "city": "Monterrey"
+    },
+    {
+      "id": 76,
+      "phase": "round32",
+      "home": "Winner Group C",
+      "away": "Runner-up Group F",
+      "utc": "2026-06-29T17:00:00Z",
+      "city": "Houston"
+    },
+    {
+      "id": 77,
+      "phase": "round32",
+      "home": "Winner Group I",
+      "away": "3rd Place (C/D/F/G/H)",
+      "utc": "2026-06-30T21:00:00Z",
+      "city": "New York/NJ"
+    },
+    {
+      "id": 78,
+      "phase": "round32",
+      "home": "Runner-up Group E",
+      "away": "Runner-up Group I",
+      "utc": "2026-06-30T17:00:00Z",
+      "city": "Dallas"
+    },
+    {
+      "id": 79,
+      "phase": "round32",
+      "home": "Winner Group A",
+      "away": "3rd Place (C/E/F/H/I)",
+      "utc": "2026-07-01T01:00:00Z",
+      "city": "Mexico City"
+    },
+    {
+      "id": 80,
+      "phase": "round32",
+      "home": "Winner Group L",
+      "away": "3rd Place (E/H/I/J/K)",
+      "utc": "2026-07-01T16:00:00Z",
+      "city": "Atlanta"
+    },
+    {
+      "id": 81,
+      "phase": "round32",
+      "home": "Winner Group D",
+      "away": "3rd Place (B/E/F/I/J)",
+      "utc": "2026-07-02T00:00:00Z",
+      "city": "San Francisco"
+    },
+    {
+      "id": 82,
+      "phase": "round32",
+      "home": "Winner Group G",
+      "away": "3rd Place (A/E/H/I/J)",
+      "utc": "2026-07-01T20:00:00Z",
+      "city": "Seattle"
+    },
+    {
+      "id": 83,
+      "phase": "round32",
+      "home": "Runner-up Group K",
+      "away": "Runner-up Group L",
+      "utc": "2026-07-02T23:00:00Z",
+      "city": "Toronto"
+    },
+    {
+      "id": 84,
+      "phase": "round32",
+      "home": "Winner Group H",
+      "away": "Runner-up Group J",
+      "utc": "2026-07-02T19:00:00Z",
+      "city": "Los Angeles"
+    },
+    {
+      "id": 85,
+      "phase": "round32",
+      "home": "Winner Group B",
+      "away": "3rd Place (E/F/G/I/J)",
+      "utc": "2026-07-03T03:00:00Z",
+      "city": "Vancouver"
+    },
+    {
+      "id": 86,
+      "phase": "round32",
+      "home": "Winner Group J",
+      "away": "Runner-up Group H",
+      "utc": "2026-07-03T22:00:00Z",
+      "city": "Miami"
+    },
+    {
+      "id": 87,
+      "phase": "round32",
+      "home": "Winner Group K",
+      "away": "3rd Place (D/E/I/J/L)",
+      "utc": "2026-07-04T01:30:00Z",
+      "city": "Kansas City"
+    },
+    {
+      "id": 88,
+      "phase": "round32",
+      "home": "Runner-up Group D",
+      "away": "Runner-up Group G",
+      "utc": "2026-07-03T18:00:00Z",
+      "city": "Dallas"
+    },
+    {
+      "id": 89,
+      "phase": "round16",
+      "home": "Winner Match 74",
+      "away": "Winner Match 77",
+      "utc": "2026-07-04T21:00:00Z",
+      "city": "Philadelphia"
+    },
+    {
+      "id": 90,
+      "phase": "round16",
+      "home": "Winner Match 73",
+      "away": "Winner Match 75",
+      "utc": "2026-07-04T17:00:00Z",
+      "city": "Houston"
+    },
+    {
+      "id": 91,
+      "phase": "round16",
+      "home": "Winner Match 76",
+      "away": "Winner Match 78",
+      "utc": "2026-07-05T20:00:00Z",
+      "city": "New York/NJ"
+    },
+    {
+      "id": 92,
+      "phase": "round16",
+      "home": "Winner Match 79",
+      "away": "Winner Match 80",
+      "utc": "2026-07-06T00:00:00Z",
+      "city": "Mexico City"
+    },
+    {
+      "id": 93,
+      "phase": "round16",
+      "home": "Winner Match 83",
+      "away": "Winner Match 84",
+      "utc": "2026-07-06T19:00:00Z",
+      "city": "Dallas"
+    },
+    {
+      "id": 94,
+      "phase": "round16",
+      "home": "Winner Match 81",
+      "away": "Winner Match 82",
+      "utc": "2026-07-07T00:00:00Z",
+      "city": "Seattle"
+    },
+    {
+      "id": 95,
+      "phase": "round16",
+      "home": "Winner Match 86",
+      "away": "Winner Match 88",
+      "utc": "2026-07-07T16:00:00Z",
+      "city": "Atlanta"
+    },
+    {
+      "id": 96,
+      "phase": "round16",
+      "home": "Winner Match 85",
+      "away": "Winner Match 87",
+      "utc": "2026-07-07T20:00:00Z",
+      "city": "Vancouver"
+    },
+    {
+      "id": 97,
+      "phase": "quarter",
+      "home": "Winner Match 89",
+      "away": "Winner Match 90",
+      "utc": "2026-07-09T20:00:00Z",
+      "city": "Boston"
+    },
+    {
+      "id": 98,
+      "phase": "quarter",
+      "home": "Winner Match 93",
+      "away": "Winner Match 94",
+      "utc": "2026-07-10T19:00:00Z",
+      "city": "Los Angeles"
+    },
+    {
+      "id": 99,
+      "phase": "quarter",
+      "home": "Winner Match 91",
+      "away": "Winner Match 92",
+      "utc": "2026-07-11T21:00:00Z",
+      "city": "Miami"
+    },
+    {
+      "id": 100,
+      "phase": "quarter",
+      "home": "Winner Match 95",
+      "away": "Winner Match 96",
+      "utc": "2026-07-12T01:00:00Z",
+      "city": "Kansas City"
+    },
+    {
+      "id": 101,
+      "phase": "semi",
+      "home": "Winner Match 97",
+      "away": "Winner Match 98",
+      "utc": "2026-07-14T19:00:00Z",
+      "city": "Dallas"
+    },
+    {
+      "id": 102,
+      "phase": "semi",
+      "home": "Winner Match 99",
+      "away": "Winner Match 100",
+      "utc": "2026-07-15T19:00:00Z",
+      "city": "Atlanta"
+    },
+    {
+      "id": 103,
+      "phase": "third",
+      "home": "Loser Match 101",
+      "away": "Loser Match 102",
+      "utc": "2026-07-18T21:00:00Z",
+      "city": "Miami"
+    },
+    {
+      "id": 104,
+      "phase": "final",
+      "home": "Winner Match 101",
+      "away": "Winner Match 102",
+      "utc": "2026-07-19T19:00:00Z",
+      "city": "New York/NJ"
+    }
+  ]
+}
