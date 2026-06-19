@@ -24,8 +24,8 @@ the ESPN team names all map (any unmapped team simply won't appear in
 ## 2a. Schedule with cron (simplest)
 ```bash
 crontab -e
-# add — runs daily at 09:00:
-0 9 * * * /bin/bash /Users/ricardo/work/spotwilliams/cosito-mundial/routine/run.sh
+# add — runs every 8 hours (00:00, 08:00, 16:00):
+0 */8 * * * /bin/bash /Users/ricardo/work/spotwilliams/cosito-mundial/routine/run.sh
 ```
 
 ## 2b. Or launchd (preferred on macOS; survives reboots, better env)
@@ -42,7 +42,14 @@ Create `~/Library/LaunchAgents/com.spotwilliams.worldcup.plist`:
     <string>/Users/ricardo/work/spotwilliams/cosito-mundial/routine/run.sh</string>
   </array>
   <key>StartCalendarInterval</key>
-  <dict><key>Hour</key><integer>9</integer><key>Minute</key><integer>0</integer></dict>
+  <array>
+    <dict><key>Hour</key><integer>0</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Hour</key><integer>1</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Hour</key><integer>6</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Hour</key><integer>7</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Hour</key><integer>10</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Hour</key><integer>15</integer><key>Minute</key><integer>0</integer></dict>
+  </array>
   <key>StandardErrorPath</key>
   <string>/Users/ricardo/work/spotwilliams/cosito-mundial/routine/launchd.err</string>
 </dict></plist>
