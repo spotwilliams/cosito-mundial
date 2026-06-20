@@ -138,5 +138,15 @@
         "home": 2,
         "away": 0,
         "status": "FT"
+    },
+    "30": {
+        "home": 0,
+        "away": 1,
+        "status": "FT"
+    },
+    "31": {
+        "home": 3,
+        "away": 0,
+        "status": "FT"
     }
 }
