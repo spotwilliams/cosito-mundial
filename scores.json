@@ -165,8 +165,8 @@
         "status": "FT"
     },
     "34": {
-        "home": 0,
+        "home": 2,
         "away": 1,
-        "status": "LIVE"
+        "status": "FT"
     }
 }
