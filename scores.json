@@ -216,7 +216,7 @@
     },
     "44": {
         "home": 1,
-        "away": 0,
-        "status": "LIVE"
+        "away": 2,
+        "status": "FT"
     }
 }
