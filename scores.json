@@ -205,8 +205,13 @@
         "status": "FT"
     },
     "42": {
-        "home": 1,
+        "home": 3,
         "away": 0,
-        "status": "LIVE"
+        "status": "FT"
+    },
+    "43": {
+        "home": 3,
+        "away": 2,
+        "status": "FT"
     }
 }
