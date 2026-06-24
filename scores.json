@@ -228,5 +228,15 @@
         "home": 0,
         "away": 0,
         "status": "FT"
+    },
+    "47": {
+        "home": 0,
+        "away": 1,
+        "status": "FT"
+    },
+    "48": {
+        "home": 1,
+        "away": 0,
+        "status": "FT"
     }
 }
