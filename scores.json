@@ -265,8 +265,8 @@
         "status": "FT"
     },
     "60": {
-        "home": 1,
-        "away": 2,
-        "status": "LIVE"
+        "home": 0,
+        "away": 0,
+        "status": "FT"
     }
 }
