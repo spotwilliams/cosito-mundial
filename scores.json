@@ -258,5 +258,15 @@
         "home": 2,
         "away": 1,
         "status": "FT"
+    },
+    "58": {
+        "home": 3,
+        "away": 1,
+        "status": "FT"
+    },
+    "60": {
+        "home": 1,
+        "away": 2,
+        "status": "LIVE"
     }
 }
