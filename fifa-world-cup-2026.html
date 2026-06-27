@@ -61,14 +61,31 @@ tailwind.config = {
       <!-- View toggle -->
       <div class="flex rounded-full border overflow-hidden">
         <button id="btn-day" onclick="setView('day')" class="px-5 py-2 text-sm font-medium bg-gray-900 text-white">By Day</button>
-        <button id="btn-phase" onclick="setView('phase')" class="px-5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100">By Phase</button>
+        <button id="btn-phase" onclick="setView('groups')" class="px-5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100">By Groups</button>
+        <button id="btn-knockout" onclick="setView('knockout')" class="px-5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 border-l">By Knock Out</button>
       </div>
 
       <!-- Search -->
-      <div>
+      <div id="searchWrap">
         <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">SEARCH TEAM</label>
         <input id="search" type="text" list="teamOptions" autocomplete="off" placeholder="e.g. Türkiye, Brazil, Argentina…" class="border rounded-lg px-3 py-2 text-sm w-64" oninput="applyFilters()">
         <datalist id="teamOptions"></datalist>
+      </div>
+
+      <!-- Phase selector -->
+      <div id="phaseWrap">
+        <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">PHASE</label>
+        <select id="phaseSelect" class="border rounded-lg px-3 py-2 text-sm w-48" onchange="applyFilters()">
+          <option value="">All phases</option>
+        </select>
+      </div>
+
+      <!-- Group selector (groups view only) -->
+      <div id="groupWrap" style="display:none">
+        <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">GROUP</label>
+        <select id="groupSelect" class="border rounded-lg px-3 py-2 text-sm w-32" onchange="applyFilters()">
+          <option value="">All groups</option>
+        </select>
       </div>
 
       <!-- Day selector -->
@@ -79,7 +96,7 @@ tailwind.config = {
 
       <button onclick="clearFilters()" class="border px-5 py-2 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100">Clear</button>
 
-      <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer select-none">
+      <label id="hidePlayedWrap" class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer select-none">
         <input id="hidePlayed" type="checkbox" checked onchange="applyFilters()" class="w-4 h-4 accent-trt"> Hide finished matches
       </label>
 
@@ -191,6 +208,8 @@ let state = { view: "day" };
 function getFilters() {
   return {
     search: document.getElementById("search").value.toLowerCase().trim(),
+    phase: document.getElementById("phaseSelect").value,
+    group: document.getElementById("groupSelect").value,
     day: document.getElementById("daySelect").value,
     hidePlayed: document.getElementById("hidePlayed").checked,
   };
@@ -198,10 +217,16 @@ function getFilters() {
 
 function filterMatches() {
   const f = getFilters();
+  // Groups view: only group stage, filtered by selected group. No search/day/hide-finished.
+  if (state.view === "groups") {
+    return MATCHES.filter(m => m.phase === "group" && (!f.group || m.group === f.group));
+  }
   return MATCHES.filter(m => {
     if (f.search) {
       if (!m.home.toLowerCase().includes(f.search) && !m.away.toLowerCase().includes(f.search)) return false;
     }
+    if (f.phase && m.phase !== f.phase) return false;
+    if (f.group && m.group !== f.group) return false;
     if (f.day && localDateKey(m.utc, m.city) !== f.day) return false;
     if (f.hidePlayed && isPlayed(m.utc)) return false;
     return true;
@@ -401,19 +426,33 @@ function applyFilters() { render(); }
 
 function setView(v) {
   state.view = v;
+  const groups = v === "groups";
   document.getElementById("btn-day").className = v==="day"
     ? "px-5 py-2 text-sm font-medium bg-gray-900 text-white"
     : "px-5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100";
-  document.getElementById("btn-phase").className = v==="phase"
+  document.getElementById("btn-phase").className = groups
     ? "px-5 py-2 text-sm font-medium bg-gray-900 text-white"
     : "px-5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100";
-  // Day jump only meaningful in day view
-  document.getElementById("dayWrap").style.display = v === "day" ? "" : "none";
+  // Groups view: only group selector matters. Hide search/phase/day/hide-finished.
+  document.getElementById("groupWrap").style.display = groups ? "" : "none";
+  document.getElementById("searchWrap").style.display = groups ? "none" : "";
+  document.getElementById("phaseWrap").style.display = groups ? "none" : "";
+  document.getElementById("dayWrap").style.display = groups ? "none" : "";
+  document.getElementById("hidePlayedWrap").style.display = groups ? "none" : "";
+  if (groups) {
+    // Default to first group
+    const gs = document.getElementById("groupSelect");
+    if (!gs.value) gs.value = gs.options[1] ? gs.options[1].value : "";
+  } else {
+    document.getElementById("groupSelect").value = "";
+  }
   render();
 }
 
 function clearFilters() {
   document.getElementById("search").value = "";
+  document.getElementById("phaseSelect").value = "";
+  document.getElementById("groupSelect").value = "";
   document.getElementById("daySelect").value = "";
   document.getElementById("hidePlayed").checked = true;
   render();
@@ -517,6 +556,19 @@ async function init() {
     daySel.min = days[0];
     daySel.max = days[days.length - 1];
   }
+
+  // Populate phase dropdown (only phases present, in order)
+  const phaseSel = document.getElementById("phaseSelect");
+  const present = new Set(MATCHES.map(m => m.phase));
+  phaseSel.innerHTML = `<option value="">All phases</option>` +
+    PHASE_ORDER.filter(p => present.has(p))
+      .map(p => `<option value="${p}">${PHASE_LABELS[p]}</option>`).join("");
+
+  // Populate group dropdown (distinct groups, sorted)
+  const groupSel = document.getElementById("groupSelect");
+  const groups = [...new Set(MATCHES.map(m => m.group).filter(Boolean))].sort();
+  groupSel.innerHTML = `<option value="">All groups</option>` +
+    groups.map(g => `<option value="${g}">Group ${g}</option>`).join("");
 
   render();              // paint from data.json + hardcoded score fallback
 

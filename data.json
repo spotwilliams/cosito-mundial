@@ -921,7 +921,7 @@
         {
             "id": 74,
             "phase": "round32",
-            "home": "Winner Group E",
+            "home": "Germany",
             "away": "3rd Place (A/B/C/D/F)",
             "utc": "2026-06-29T20:30:00Z",
             "city": "Boston"
@@ -929,23 +929,23 @@
         {
             "id": 75,
             "phase": "round32",
-            "home": "Winner Group F",
-            "away": "Runner-up Group C",
+            "home": "Netherlands",
+            "away": "Morocco",
             "utc": "2026-06-30T01:00:00Z",
             "city": "Monterrey"
         },
         {
             "id": 76,
             "phase": "round32",
-            "home": "Winner Group C",
-            "away": "Runner-up Group F",
+            "home": "Brazil",
+            "away": "Japan",
             "utc": "2026-06-29T17:00:00Z",
             "city": "Houston"
         },
         {
             "id": 77,
             "phase": "round32",
-            "home": "Winner Group I",
+            "home": "France",
             "away": "3rd Place (C/D/F/G/H)",
             "utc": "2026-06-30T21:00:00Z",
             "city": "New York/NJ"
@@ -953,15 +953,15 @@
         {
             "id": 78,
             "phase": "round32",
-            "home": "Runner-up Group E",
-            "away": "Runner-up Group I",
+            "home": "Ivory Coast",
+            "away": "Norway",
             "utc": "2026-06-30T17:00:00Z",
             "city": "Dallas"
         },
         {
             "id": 79,
             "phase": "round32",
-            "home": "Winner Group A",
+            "home": "Mexico",
             "away": "3rd Place (C/E/F/H/I)",
             "utc": "2026-07-01T01:00:00Z",
             "city": "Mexico City"
@@ -969,7 +969,7 @@
         {
             "id": 80,
             "phase": "round32",
-            "home": "Winner Group L",
+            "home": "England",
             "away": "3rd Place (E/H/I/J/K)",
             "utc": "2026-07-01T16:00:00Z",
             "city": "Atlanta"
@@ -977,7 +977,7 @@
         {
             "id": 81,
             "phase": "round32",
-            "home": "Winner Group D",
+            "home": "USA",
             "away": "3rd Place (B/E/F/I/J)",
             "utc": "2026-07-02T00:00:00Z",
             "city": "San Francisco"
@@ -985,7 +985,7 @@
         {
             "id": 82,
             "phase": "round32",
-            "home": "Winner Group G",
+            "home": "Belgium",
             "away": "3rd Place (A/E/H/I/J)",
             "utc": "2026-07-01T20:00:00Z",
             "city": "Seattle"
@@ -993,15 +993,15 @@
         {
             "id": 83,
             "phase": "round32",
-            "home": "Runner-up Group K",
-            "away": "Runner-up Group L",
+            "home": "Portugal",
+            "away": "Ghana",
             "utc": "2026-07-02T23:00:00Z",
             "city": "Toronto"
         },
         {
             "id": 84,
             "phase": "round32",
-            "home": "Winner Group H",
+            "home": "Spain",
             "away": "Runner-up Group J",
             "utc": "2026-07-02T19:00:00Z",
             "city": "Los Angeles"
@@ -1009,7 +1009,7 @@
         {
             "id": 85,
             "phase": "round32",
-            "home": "Winner Group B",
+            "home": "Switzerland",
             "away": "3rd Place (E/F/G/I/J)",
             "utc": "2026-07-03T03:00:00Z",
             "city": "Vancouver"
@@ -1017,15 +1017,15 @@
         {
             "id": 86,
             "phase": "round32",
-            "home": "Winner Group J",
-            "away": "Runner-up Group H",
+            "home": "Argentina",
+            "away": "Cape Verde",
             "utc": "2026-07-03T22:00:00Z",
             "city": "Miami"
         },
         {
             "id": 87,
             "phase": "round32",
-            "home": "Winner Group K",
+            "home": "Colombia",
             "away": "3rd Place (D/E/I/J/L)",
             "utc": "2026-07-04T01:30:00Z",
             "city": "Kansas City"
@@ -1033,8 +1033,8 @@
         {
             "id": 88,
             "phase": "round32",
-            "home": "Runner-up Group D",
-            "away": "Runner-up Group G",
+            "home": "Australia",
+            "away": "Egypt",
             "utc": "2026-07-03T18:00:00Z",
             "city": "Dallas"
         },

@@ -14,14 +14,18 @@ A local routine that updates `scores.json` and advances knockout teams in
 
 ## 1. Test it interactively first
 ```bash
-php routine/fetch-results.php --dry-run   # show changes, write nothing
-php routine/fetch-results.php             # actually update the JSON
-bash routine/run.sh                       # full run: update + commit + push
-git log -1 --stat                         # confirm it committed/pushed sensibly
+php routine/fetch-results.php --dry-run     # results + bracket: show changes
+php routine/fetch-standings.php --dry-run   # group winners/runners-up: show changes
+php routine/fetch-results.php               # actually update the JSON
+php routine/fetch-standings.php             # actually update the JSON
+bash routine/run.sh                         # full run: update + commit + push
+git log -1 --stat                           # confirm it committed/pushed sensibly
 ```
+`run.sh` runs both PHP scripts in order (`fetch-results.php` then
+`fetch-standings.php`), so whatever schedules `run.sh` covers both.
 Run these once before scheduling so you can watch what happens and confirm
 the ESPN team names all map (any unmapped team simply won't appear in
-`--dry-run` output — add it to `$ALIASES` in `fetch-results.php`).
+`--dry-run` output — add it to `$ALIASES`, which both scripts keep in sync).
 
 ## 2a. Schedule with cron (simplest)
 ```bash
@@ -57,6 +61,9 @@ Create `~/Library/LaunchAgents/com.spotwilliams.worldcup.plist`:
 </dict></plist>
 ```
 Then: `launchctl load ~/Library/LaunchAgents/com.spotwilliams.worldcup.plist`
+
+One agent is enough: it runs `run.sh`, which executes both `fetch-results.php`
+and `fetch-standings.php` each fire. No separate plist per script.
 
 ## Gotchas
 - **PATH:** cron/launchd start with a bare PATH. `run.sh` sets a sensible one;
