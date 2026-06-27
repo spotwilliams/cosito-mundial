@@ -6,6 +6,8 @@ A local routine that updates `scores.json` and advances knockout teams in
 
 ## Files
 - `fetch-results.php` — pulls results + bracket from ESPN and writes the JSON.
+- `fetch-standings.php` — fills `Winner/Runner-up Group X` knockout slots from ESPN
+  group standings, but only once ESPN confirms a group's top two advanced.
 - `run.sh` — headless runner (cron/launchd calls this): pull → php → commit → push.
 - `update-prompt.md` — optional Claude Code fallback for odd cases; not used by `run.sh`.
 - `logs/` — one timestamped log per run (gitignored).

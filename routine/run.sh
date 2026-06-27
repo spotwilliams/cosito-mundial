@@ -22,6 +22,11 @@ git pull --rebase --autostash origin main >> "$LOG" 2>&1 || true
 # Fast path: pull results + advance bracket straight from ESPN's free feed (no LLM).
 php routine/fetch-results.php >> "$LOG" 2>&1
 
+# Fill knockout group placeholders (Winner/Runner-up Group X) from ESPN standings,
+# but only once ESPN confirms each group's top two advanced. Complements the
+# scoreboard-based advancement above; never guesses ahead of ESPN.
+php routine/fetch-standings.php >> "$LOG" 2>&1
+
 # Commit & push only if the JSON actually changed.
 if [ -n "$(git status --porcelain scores.json data.json)" ]; then
   git add scores.json data.json
