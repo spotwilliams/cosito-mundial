@@ -72,11 +72,11 @@ tailwind.config = {
         <datalist id="teamOptions"></datalist>
       </div>
 
-      <!-- Phase selector -->
-      <div id="phaseWrap">
-        <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">PHASE</label>
+      <!-- Round selector (knockout view only) -->
+      <div id="phaseWrap" style="display:none">
+        <label class="text-[10px] tracking-wider text-gray-500 font-semibold block mb-1">ROUND</label>
         <select id="phaseSelect" class="border rounded-lg px-3 py-2 text-sm w-48" onchange="applyFilters()">
-          <option value="">All phases</option>
+          <option value="">All rounds</option>
         </select>
       </div>
 
@@ -220,6 +220,10 @@ function filterMatches() {
   // Groups view: only group stage, filtered by selected group. No search/day/hide-finished.
   if (state.view === "groups") {
     return MATCHES.filter(m => m.phase === "group" && (!f.group || m.group === f.group));
+  }
+  // Knockout view: only knockout rounds, filtered by selected round. No search/day/hide-finished.
+  if (state.view === "knockout") {
+    return MATCHES.filter(m => m.phase !== "group" && (!f.phase || m.phase === f.phase));
   }
   return MATCHES.filter(m => {
     if (f.search) {
@@ -426,26 +430,25 @@ function applyFilters() { render(); }
 
 function setView(v) {
   state.view = v;
-  const groups = v === "groups";
-  document.getElementById("btn-day").className = v==="day"
-    ? "px-5 py-2 text-sm font-medium bg-gray-900 text-white"
-    : "px-5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100";
-  document.getElementById("btn-phase").className = groups
-    ? "px-5 py-2 text-sm font-medium bg-gray-900 text-white"
-    : "px-5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100";
-  // Groups view: only group selector matters. Hide search/phase/day/hide-finished.
+  const day = v === "day", groups = v === "groups", knockout = v === "knockout";
+  const on = "px-5 py-2 text-sm font-medium bg-gray-900 text-white";
+  const off = "px-5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100";
+  document.getElementById("btn-day").className = day ? on : off;
+  document.getElementById("btn-phase").className = groups ? on : off;
+  document.getElementById("btn-knockout").className = knockout ? on + " border-l" : off + " border-l";
+  // Per-view controls: Day = search/day/hide-finished; Groups = group; Knockout = round.
+  document.getElementById("searchWrap").style.display = day ? "" : "none";
+  document.getElementById("dayWrap").style.display = day ? "" : "none";
+  document.getElementById("hidePlayedWrap").style.display = day ? "" : "none";
   document.getElementById("groupWrap").style.display = groups ? "" : "none";
-  document.getElementById("searchWrap").style.display = groups ? "none" : "";
-  document.getElementById("phaseWrap").style.display = groups ? "none" : "";
-  document.getElementById("dayWrap").style.display = groups ? "none" : "";
-  document.getElementById("hidePlayedWrap").style.display = groups ? "none" : "";
-  if (groups) {
-    // Default to first group
-    const gs = document.getElementById("groupSelect");
-    if (!gs.value) gs.value = gs.options[1] ? gs.options[1].value : "";
-  } else {
-    document.getElementById("groupSelect").value = "";
-  }
+  document.getElementById("phaseWrap").style.display = knockout ? "" : "none";
+  // Default selections
+  const gs = document.getElementById("groupSelect");
+  const ps = document.getElementById("phaseSelect");
+  if (groups) { if (!gs.value) gs.value = gs.options[1] ? gs.options[1].value : ""; }
+  else gs.value = "";
+  if (knockout) { if (!ps.value) ps.value = ps.options[1] ? ps.options[1].value : ""; }
+  else ps.value = "";
   render();
 }
 
@@ -560,8 +563,8 @@ async function init() {
   // Populate phase dropdown (only phases present, in order)
   const phaseSel = document.getElementById("phaseSelect");
   const present = new Set(MATCHES.map(m => m.phase));
-  phaseSel.innerHTML = `<option value="">All phases</option>` +
-    PHASE_ORDER.filter(p => present.has(p))
+  phaseSel.innerHTML = `<option value="">All rounds</option>` +
+    PHASE_ORDER.slice(1).filter(p => present.has(p))
       .map(p => `<option value="${p}">${PHASE_LABELS[p]}</option>`).join("");
 
   // Populate group dropdown (distinct groups, sorted)
