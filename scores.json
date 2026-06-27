@@ -270,7 +270,17 @@
         "status": "FT"
     },
     "62": {
-        "home": 4,
+        "home": 5,
+        "away": 0,
+        "status": "FT"
+    },
+    "64": {
+        "home": 0,
+        "away": 1,
+        "status": "FT"
+    },
+    "66": {
+        "home": 5,
         "away": 1,
         "status": "FT"
     }
