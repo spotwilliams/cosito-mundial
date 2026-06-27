@@ -1,3 +1,5 @@
 .serena/
 .idea/
 routine/logs/*
+routine/launchd.err
+routine/launchd.out

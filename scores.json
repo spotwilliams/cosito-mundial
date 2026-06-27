@@ -239,8 +239,18 @@
         "away": 0,
         "status": "FT"
     },
+    "49": {
+        "home": 2,
+        "away": 1,
+        "status": "FT"
+    },
     "50": {
-        "home": 1,
+        "home": 3,
+        "away": 1,
+        "status": "FT"
+    },
+    "51": {
+        "home": 4,
         "away": 2,
         "status": "FT"
     },
@@ -249,9 +259,19 @@
         "away": 3,
         "status": "FT"
     },
+    "53": {
+        "home": 1,
+        "away": 0,
+        "status": "FT"
+    },
     "54": {
         "home": 0,
-        "away": 1,
+        "away": 3,
+        "status": "FT"
+    },
+    "55": {
+        "home": 0,
+        "away": 2,
         "status": "FT"
     },
     "56": {
@@ -259,18 +279,38 @@
         "away": 1,
         "status": "FT"
     },
+    "57": {
+        "home": 1,
+        "away": 3,
+        "status": "FT"
+    },
     "58": {
-        "home": 3,
+        "home": 1,
         "away": 1,
         "status": "FT"
     },
+    "59": {
+        "home": 3,
+        "away": 2,
+        "status": "FT"
+    },
     "60": {
-        "home": 2,
-        "away": 3,
+        "home": 0,
+        "away": 0,
+        "status": "FT"
+    },
+    "61": {
+        "home": 1,
+        "away": 4,
         "status": "FT"
     },
     "62": {
         "home": 5,
+        "away": 0,
+        "status": "FT"
+    },
+    "63": {
+        "home": 0,
         "away": 0,
         "status": "FT"
     },
@@ -279,8 +319,13 @@
         "away": 1,
         "status": "FT"
     },
+    "65": {
+        "home": 1,
+        "away": 5,
+        "status": "FT"
+    },
     "66": {
-        "home": 5,
+        "home": 1,
         "away": 1,
         "status": "FT"
     }

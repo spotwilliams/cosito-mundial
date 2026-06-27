@@ -140,11 +140,13 @@ foreach ($data['matches'] as $m) {
     }
 }
 
-// index our matches by exact UTC timestamp for the join
+// index our matches by exact UTC timestamp for the join.
+// NOTE: final group-round matches kick off simultaneously, so one timestamp
+// maps to MANY matches — keep a list and disambiguate by team name below.
 $byTs = [];
 foreach ($data['matches'] as $i => $m) {
     $ts = strtotime($m['utc']);
-    if ($ts !== false) $byTs[$ts] = $i; // index into $data['matches']
+    if ($ts !== false) $byTs[$ts][] = $i; // list of indices into $data['matches']
 }
 
 /* ----------------------------------------------------------- fetch & merge */
@@ -172,8 +174,35 @@ while ($cur <= $end) {
         $comp = $ev['competitions'][0];
         $evTs = strtotime($ev['date']);
 
-        // ---- find our match: exact timestamp, else same-day + venue fallback ----
-        $idx = $byTs[$evTs] ?? null;
+        // ---- pull ESPN competitors (needed to disambiguate simultaneous matches) ----
+        $cs = $comp['competitors'];
+        $eh = null; $ea = null;
+        foreach ($cs as $c) {
+            if (($c['homeAway'] ?? '') === 'home') $eh = $c;
+            elseif (($c['homeAway'] ?? '') === 'away') $ea = $c;
+        }
+        if (!$eh || !$ea) continue;
+
+        $ehName = canon_team($eh['team']['displayName'] ?? '', $ourNormIndex, $ALIASES);
+        $eaName = canon_team($ea['team']['displayName'] ?? '', $ourNormIndex, $ALIASES);
+
+        // ---- find our match ----
+        // Many matches can share one kickoff timestamp (final group round), so
+        // pick the candidate whose team pair matches this ESPN event. With one
+        // candidate, take it. Else fall back to same-day + venue.
+        $idx = null;
+        $candidates = $byTs[$evTs] ?? [];
+        if (count($candidates) === 1) {
+            $idx = $candidates[0];
+        } elseif (count($candidates) > 1) {
+            $espnPair = array_filter([$ehName ? norm($ehName) : null, $eaName ? norm($eaName) : null]);
+            foreach ($candidates as $k) {
+                $m = $data['matches'][$k];
+                $ourPair = [norm($m['home']), norm($m['away'])];
+                // match if both resolved ESPN teams are in our pair (order-agnostic)
+                if (count($espnPair) === 2 && !array_diff($espnPair, $ourPair)) { $idx = $k; break; }
+            }
+        }
         if ($idx === null) {
             $evDay = gmdate('Y-m-d', $evTs);
             $venueCity = norm($comp['venue']['address']['city'] ?? '');
@@ -186,18 +215,6 @@ while ($cur <= $end) {
 
         $match = &$data['matches'][$idx];
         $id = $match['id'];
-
-        // ---- pull ESPN competitors ----
-        $cs = $comp['competitors'];
-        $eh = null; $ea = null;
-        foreach ($cs as $c) {
-            if (($c['homeAway'] ?? '') === 'home') $eh = $c;
-            elseif (($c['homeAway'] ?? '') === 'away') $ea = $c;
-        }
-        if (!$eh || !$ea) continue;
-
-        $ehName = canon_team($eh['team']['displayName'] ?? '', $ourNormIndex, $ALIASES);
-        $eaName = canon_team($ea['team']['displayName'] ?? '', $ourNormIndex, $ALIASES);
 
         // ---- ADVANCEMENT: fill knockout placeholders from real ESPN teams ----
         if (is_placeholder($match['home']) && $ehName && is_placeholder($match['away']) && $eaName) {
