@@ -350,13 +350,13 @@
         "status": "FT"
     },
     "71": {
-        "home": 2,
-        "away": 2,
-        "status": "LIVE"
+        "home": 3,
+        "away": 3,
+        "status": "FT"
     },
     "72": {
         "home": 1,
-        "away": 2,
-        "status": "LIVE"
+        "away": 3,
+        "status": "FT"
     }
 }
