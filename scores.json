@@ -331,12 +331,32 @@
     },
     "67": {
         "home": 0,
-        "away": 0,
-        "status": "LIVE"
+        "away": 2,
+        "status": "FT"
     },
     "68": {
+        "home": 2,
+        "away": 1,
+        "status": "FT"
+    },
+    "69": {
         "home": 0,
         "away": 0,
+        "status": "FT"
+    },
+    "70": {
+        "home": 3,
+        "away": 1,
+        "status": "FT"
+    },
+    "71": {
+        "home": 2,
+        "away": 2,
+        "status": "LIVE"
+    },
+    "72": {
+        "home": 1,
+        "away": 2,
         "status": "LIVE"
     }
 }
