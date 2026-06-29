@@ -259,6 +259,52 @@ while ($cur <= $end) {
     }
 }
 
+/* ----------------------------------------------------- propagate bracket */
+// Carry knockout winners/losers forward: replace "Winner Match N" / "Loser
+// Match N" slots with the actual team once match N has a decisive FT result.
+// Source of truth is OUR recorded scores — no ESPN dependency, so the bracket
+// advances the moment a result lands. A drawn knockout can't be resolved from
+// the score alone (no shootout data in scores.json), so we skip it and leave
+// the placeholder; never guess a winner.
+
+$byId = [];
+foreach ($data['matches'] as $i => $m) $byId[$m['id']] = $i;
+
+// Resolve one "Winner Match N" / "Loser Match N" token to a team name, or null
+// if match N isn't a decided tie between two concrete teams yet.
+$resolveSlot = function ($val) use (&$data, $byId, $scores) {
+    if (!preg_match('/^(Winner|Loser) Match (\d+)$/', $val, $mm)) return null;
+    $which = $mm[1];
+    $srcId = (int) $mm[2];
+    if (!isset($byId[$srcId])) return null;
+    $src = $data['matches'][$byId[$srcId]];
+    if (is_placeholder($src['home']) || is_placeholder($src['away'])) return null; // teams unknown
+    $sc = $scores[(string) $srcId] ?? null;
+    if (!$sc || ($sc['status'] ?? '') !== 'FT') return null;                       // not final
+    if ($sc['home'] === $sc['away']) return null;            // draw -> needs shootout data we don't have
+    $homeWon = $sc['home'] > $sc['away'];
+    $winner  = $homeWon ? $src['home'] : $src['away'];
+    $loser   = $homeWon ? $src['away'] : $src['home'];
+    return $which === 'Winner' ? $winner : $loser;
+};
+
+// Fixed-point: a slot resolved this pass may unlock the next round in the next.
+$bracketChanges = [];
+do {
+    $changedThisPass = false;
+    foreach ($data['matches'] as &$m) {
+        foreach (['home', 'away'] as $side) {
+            $r = $resolveSlot($m[$side]);
+            if ($r !== null && $r !== $m[$side]) {
+                $bracketChanges[$m['id']][] = "$side: {$m[$side]} -> $r";
+                $m[$side] = $r;
+                $changedThisPass = true;
+            }
+        }
+    }
+    unset($m);
+} while ($changedThisPass);
+
 /* ------------------------------------------------------------------ output */
 
 // keep scores.json ordered by numeric match id for clean diffs
@@ -278,6 +324,10 @@ if ($scoreChanges) {
 if ($advanceChanges) {
     echo $tag . "teams advanced (" . count($advanceChanges) . "): ";
     echo implode(' | ', array_map(fn($id, $v) => "#$id $v", array_keys($advanceChanges), $advanceChanges)) . "\n";
+}
+if ($bracketChanges) {
+    echo $tag . "bracket advanced (" . count($bracketChanges) . " matches):\n";
+    foreach ($bracketChanges as $id => $list) echo "  #$id " . implode('; ', $list) . "\n";
 }
 echo $tag . ($scoresWritten || $dataWritten ? "files changed\n" : "nothing to write\n");
 
