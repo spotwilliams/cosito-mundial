@@ -922,7 +922,7 @@
             "id": 74,
             "phase": "round32",
             "home": "Germany",
-            "away": "3rd Place (A/B/C/D/F)",
+            "away": "Paraguay",
             "utc": "2026-06-29T20:30:00Z",
             "city": "Boston"
         },
@@ -946,7 +946,7 @@
             "id": 77,
             "phase": "round32",
             "home": "France",
-            "away": "3rd Place (C/D/F/G/H)",
+            "away": "Sweden",
             "utc": "2026-06-30T21:00:00Z",
             "city": "New York/NJ"
         },
@@ -962,7 +962,7 @@
             "id": 79,
             "phase": "round32",
             "home": "Mexico",
-            "away": "3rd Place (C/E/F/H/I)",
+            "away": "Ecuador",
             "utc": "2026-07-01T01:00:00Z",
             "city": "Mexico City"
         },
@@ -970,7 +970,7 @@
             "id": 80,
             "phase": "round32",
             "home": "England",
-            "away": "3rd Place (E/H/I/J/K)",
+            "away": "DR Congo",
             "utc": "2026-07-01T16:00:00Z",
             "city": "Atlanta"
         },
@@ -978,7 +978,7 @@
             "id": 81,
             "phase": "round32",
             "home": "USA",
-            "away": "3rd Place (B/E/F/I/J)",
+            "away": "Bosnia and Herzegovina",
             "utc": "2026-07-02T00:00:00Z",
             "city": "San Francisco"
         },
@@ -986,7 +986,7 @@
             "id": 82,
             "phase": "round32",
             "home": "Belgium",
-            "away": "3rd Place (A/E/H/I/J)",
+            "away": "Senegal",
             "utc": "2026-07-01T20:00:00Z",
             "city": "Seattle"
         },
@@ -1010,7 +1010,7 @@
             "id": 85,
             "phase": "round32",
             "home": "Switzerland",
-            "away": "3rd Place (E/F/G/I/J)",
+            "away": "Algeria",
             "utc": "2026-07-03T03:00:00Z",
             "city": "Vancouver"
         },
@@ -1026,7 +1026,7 @@
             "id": 87,
             "phase": "round32",
             "home": "Colombia",
-            "away": "3rd Place (D/E/I/J/L)",
+            "away": "Ghana",
             "utc": "2026-07-04T01:30:00Z",
             "city": "Kansas City"
         },
