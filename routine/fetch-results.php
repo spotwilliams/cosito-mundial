@@ -17,6 +17,8 @@
 
 date_default_timezone_set('UTC');
 
+require_once __DIR__ . '/bracket.php';   // kc_propagate_bracket(), network-free
+
 $ROOT      = dirname(__DIR__);
 $DATA_FILE = $ROOT . '/data.json';
 $SCORES_FILE = $ROOT . '/scores.json';
@@ -274,57 +276,11 @@ while ($cur <= $end) {
 
 /* ----------------------------------------------------- propagate bracket */
 // Carry knockout winners/losers forward: replace "Winner Match N" / "Loser
-// Match N" slots with the actual team once match N has a decisive FT result.
-// Source of truth is OUR recorded scores — no ESPN dependency, so the bracket
-// advances the moment a result lands. A drawn knockout can't be resolved from
-// the score alone (no shootout data in scores.json), so we skip it and leave
-// the placeholder; never guess a winner.
-
-$byId = [];
-foreach ($data['matches'] as $i => $m) $byId[$m['id']] = $i;
-
-// Resolve one "Winner Match N" / "Loser Match N" token to a team name, or null
-// if match N isn't a decided tie between two concrete teams yet.
-$resolveSlot = function ($val) use (&$data, $byId, $scores) {
-    if (!preg_match('/^(Winner|Loser) Match (\d+)$/', $val, $mm)) return null;
-    $which = $mm[1];
-    $srcId = (int) $mm[2];
-    if (!isset($byId[$srcId])) return null;
-    $src = $data['matches'][$byId[$srcId]];
-    if (is_placeholder($src['home']) || is_placeholder($src['away'])) return null; // teams unknown
-    $sc = $scores[(string) $srcId] ?? null;
-    if (!$sc || ($sc['status'] ?? '') !== 'FT') return null;                       // not final
-    if ($sc['home'] === $sc['away']) {
-        // Level after full time -> decided on penalties. Use the shootout tally
-        // if we recorded one; otherwise the winner is unknown, so don't guess.
-        $ph = $sc['penHome'] ?? null;
-        $pa = $sc['penAway'] ?? null;
-        if ($ph === null || $pa === null || $ph === $pa) return null;
-        $homeWon = $ph > $pa;
-    } else {
-        $homeWon = $sc['home'] > $sc['away'];
-    }
-    $winner  = $homeWon ? $src['home'] : $src['away'];
-    $loser   = $homeWon ? $src['away'] : $src['home'];
-    return $which === 'Winner' ? $winner : $loser;
-};
-
-// Fixed-point: a slot resolved this pass may unlock the next round in the next.
-$bracketChanges = [];
-do {
-    $changedThisPass = false;
-    foreach ($data['matches'] as &$m) {
-        foreach (['home', 'away'] as $side) {
-            $r = $resolveSlot($m[$side]);
-            if ($r !== null && $r !== $m[$side]) {
-                $bracketChanges[$m['id']][] = "$side: {$m[$side]} -> $r";
-                $m[$side] = $r;
-                $changedThisPass = true;
-            }
-        }
-    }
-    unset($m);
-} while ($changedThisPass);
+// Match N" slots with the actual team once match N has a decisive result (or a
+// recorded shootout). Source of truth is OUR scores — no ESPN dependency, so
+// the bracket advances the moment a result lands. The logic lives in
+// bracket.php so it can be exercised by tests without touching the network.
+$bracketChanges = kc_propagate_bracket($data, $scores);
 
 /* ------------------------------------------------------------------ output */
 
