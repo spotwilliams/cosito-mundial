@@ -327,8 +327,78 @@ function renderMatchCard(m) {
         </div>
         <div class="text-[10px] text-red-200">${trtDate(m.utc)}</div>
       </div>
+      <div>
+        <button onclick="addToCalendar(${m.id})" title="Download a calendar event (.ics) for this match"
+          class="mt-1.5 text-[11px] font-semibold text-gray-500 hover:text-gray-900 inline-flex items-center gap-1 cursor-pointer">
+          📅 Add to calendar
+        </button>
+      </div>
     </div>
   </div>`;
+}
+
+// ============================
+// CALENDAR EXPORT (.ics)
+// ============================
+// Build a standard iCalendar event for a match and download it. Works with
+// Apple Calendar, Google Calendar, Outlook — no external service. Kickoff is the
+// match UTC; we block out 2 hours (covers extra time / penalties comfortably).
+const ICS_MATCH_MINUTES = 120;
+
+// Date -> iCalendar UTC basic format, e.g. 20260629T203000Z
+function icsDate(d) {
+  return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+}
+
+// Escape a value for an ICS text field (RFC 5545): backslash, comma, semicolon, newline.
+function icsEscape(s) {
+  return String(s).replace(/\\/g, "\\\\").replace(/([,;])/g, "\\$1").replace(/\n/g, "\\n");
+}
+
+function matchToICS(m) {
+  const v = VENUES[m.city] || {};
+  const start = new Date(m.utc);
+  const end = new Date(start.getTime() + ICS_MATCH_MINUTES * 60000);
+  const phase = (m.phase === "group")
+    ? `Group ${m.group} · Matchday ${m.md}`
+    : (PHASE_LABELS[m.phase] || m.phase);
+
+  const summary = `${m.home} v ${m.away} — FIFA WC26`;
+  const location = [v.stadium, m.city].filter(Boolean).join(", ");
+  const desc = `${phase}. Kickoff ${localTime(m.utc, m.city)} local (${m.city}) / ${trtTime(m.utc)} TRT.`;
+
+  // CRLF line endings are required by the spec.
+  return [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//cosito-mundial//World Cup 2026//EN",
+    "CALSCALE:GREGORIAN",
+    "BEGIN:VEVENT",
+    `UID:wc2026-match-${m.id}@cosito-mundial`,
+    `DTSTAMP:${icsDate(new Date())}`,
+    `DTSTART:${icsDate(start)}`,
+    `DTEND:${icsDate(end)}`,
+    `SUMMARY:${icsEscape(summary)}`,
+    `LOCATION:${icsEscape(location)}`,
+    `DESCRIPTION:${icsEscape(desc)}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+}
+
+function addToCalendar(id) {
+  const m = MATCHES.find(x => x.id === id);
+  if (!m) return;
+  const blob = new Blob([matchToICS(m)], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const slug = `${m.home}-vs-${m.away}`.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "");
+  a.href = url;
+  a.download = `WC2026-M${m.id}-${slug}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
 // ============================
