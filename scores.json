@@ -367,6 +367,11 @@
     "74": {
         "home": 1,
         "away": 1,
+        "status": "FT"
+    },
+    "75": {
+        "home": 1,
+        "away": 1,
         "status": "LIVE"
     },
     "76": {
