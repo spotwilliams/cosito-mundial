@@ -270,12 +270,20 @@ function renderMatchCard(m) {
   const score = getScore(m);
   let homeScore = "", awayScore = "", homeWin = "", awayWin = "", ftBadge = "";
   if (score) {
-    homeScore = `<span class="text-xl font-bold tabular-nums ml-auto pl-3">${score.home}</span>`;
-    awayScore = `<span class="text-xl font-bold tabular-nums ml-auto pl-3">${score.away}</span>`;
+    // Penalty shootout (level knockout): show the pen tally in parentheses,
+    // e.g. 1 (4), and decide the winner by pens rather than the level score.
+    const hasPens = (score.penHome != null && score.penAway != null);
+    const penH = hasPens ? ` <span class="text-sm text-gray-500 font-semibold">(${score.penHome})</span>` : "";
+    const penA = hasPens ? ` <span class="text-sm text-gray-500 font-semibold">(${score.penAway})</span>` : "";
+    homeScore = `<span class="text-xl font-bold tabular-nums ml-auto pl-3">${score.home}${penH}</span>`;
+    awayScore = `<span class="text-xl font-bold tabular-nums ml-auto pl-3">${score.away}${penA}</span>`;
     if (score.status === "FT") {
-      if (score.home > score.away) awayWin = "text-gray-400";
-      else if (score.away > score.home) homeWin = "text-gray-400";
-      ftBadge = `<span class="inline-block bg-gray-200 text-gray-700 text-[10px] font-bold px-2 py-0.5 rounded mt-1">FT</span>`;
+      const homeWon = (hasPens && score.home === score.away) ? score.penHome > score.penAway : score.home > score.away;
+      const awayWon = (hasPens && score.home === score.away) ? score.penAway > score.penHome : score.away > score.home;
+      if (homeWon) awayWin = "text-gray-400";
+      else if (awayWon) homeWin = "text-gray-400";
+      const ftLabel = hasPens ? "FT&nbsp;·&nbsp;PENS" : "FT";
+      ftBadge = `<span class="inline-block bg-gray-200 text-gray-700 text-[10px] font-bold px-2 py-0.5 rounded mt-1">${ftLabel}</span>`;
     }
   }
 
@@ -488,7 +496,9 @@ function updateClocks() {
 // ============================
 // SCORES — loaded from scores.json (updated by a separate process)
 // Writes into SCORES overlay only; MATCHES untouched.
-// scores.json shape: { "<matchId>": {home:Int, away:Int, status:"NS"|"LIVE"|"FT"}, ... }
+// scores.json shape: { "<matchId>": {home:Int, away:Int, status:"NS"|"LIVE"|"FT"
+//                       [, penHome:Int, penAway:Int]}, ... }
+// penHome/penAway present only for a knockout decided on penalties (level FT).
 // ============================
 const SCORES_URL = "scores.json";
 

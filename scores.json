@@ -367,12 +367,16 @@
     "74": {
         "home": 1,
         "away": 1,
-        "status": "FT"
+        "status": "FT",
+        "penHome": 3,
+        "penAway": 4
     },
     "75": {
         "home": 1,
         "away": 1,
-        "status": "FT"
+        "status": "FT",
+        "penHome": 2,
+        "penAway": 3
     },
     "76": {
         "home": 2,

@@ -246,14 +246,27 @@ while ($cur <= $end) {
 
         $status = ($state === 'post' || $completed) ? 'FT' : 'LIVE';
 
+        // Penalty shootout: a level knockout is decided on penalties. ESPN sets
+        // status name STATUS_FINAL_PEN and a per-competitor `shootoutScore`.
+        // Record pen tallies (oriented to our home/away) so the result reads
+        // e.g. 1 (3) - 1 (4) and the bracket can advance the real winner.
+        $isPens = (($comp['status']['type']['name'] ?? '') === 'STATUS_FINAL_PEN');
+        $hPen = ($isPens && isset($eh['shootoutScore']) && $eh['shootoutScore'] !== '') ? (int) $eh['shootoutScore'] : null;
+        $aPen = ($isPens && isset($ea['shootoutScore']) && $ea['shootoutScore'] !== '') ? (int) $ea['shootoutScore'] : null;
+
         $existing = $scores[(string)$id] ?? null;
         // Don't overwrite a finished result with a non-final one.
         if ($existing && ($existing['status'] ?? '') === 'FT' && $status !== 'FT') continue;
 
         $new = ['home' => $outHome, 'away' => $outAway, 'status' => $status];
+        if ($hPen !== null && $aPen !== null) {
+            $new['penHome'] = $homeIsOurHome ? $hPen : $aPen;
+            $new['penAway'] = $homeIsOurHome ? $aPen : $hPen;
+        }
         if ($existing !== $new) {
             $scores[(string)$id] = $new;
-            $scoreChanges[$id] = "$outHome-$outAway $status";
+            $pens = isset($new['penHome']) ? " (pens {$new['penHome']}-{$new['penAway']})" : '';
+            $scoreChanges[$id] = "$outHome-$outAway $status$pens";
         }
         unset($match);
     }
@@ -281,8 +294,16 @@ $resolveSlot = function ($val) use (&$data, $byId, $scores) {
     if (is_placeholder($src['home']) || is_placeholder($src['away'])) return null; // teams unknown
     $sc = $scores[(string) $srcId] ?? null;
     if (!$sc || ($sc['status'] ?? '') !== 'FT') return null;                       // not final
-    if ($sc['home'] === $sc['away']) return null;            // draw -> needs shootout data we don't have
-    $homeWon = $sc['home'] > $sc['away'];
+    if ($sc['home'] === $sc['away']) {
+        // Level after full time -> decided on penalties. Use the shootout tally
+        // if we recorded one; otherwise the winner is unknown, so don't guess.
+        $ph = $sc['penHome'] ?? null;
+        $pa = $sc['penAway'] ?? null;
+        if ($ph === null || $pa === null || $ph === $pa) return null;
+        $homeWon = $ph > $pa;
+    } else {
+        $homeWon = $sc['home'] > $sc['away'];
+    }
     $winner  = $homeWon ? $src['home'] : $src['away'];
     $loser   = $homeWon ? $src['away'] : $src['home'];
     return $which === 'Winner' ? $winner : $loser;
