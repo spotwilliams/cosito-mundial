@@ -402,5 +402,10 @@
         "home": 2,
         "away": 1,
         "status": "FT"
+    },
+    "82": {
+        "home": 0,
+        "away": 1,
+        "status": "LIVE"
     }
 }
