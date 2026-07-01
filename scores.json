@@ -382,5 +382,20 @@
         "home": 2,
         "away": 1,
         "status": "FT"
+    },
+    "77": {
+        "home": 3,
+        "away": 0,
+        "status": "FT"
+    },
+    "78": {
+        "home": 1,
+        "away": 2,
+        "status": "FT"
+    },
+    "79": {
+        "home": 0,
+        "away": 0,
+        "status": "LIVE"
     }
 }
