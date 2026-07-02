@@ -403,9 +403,14 @@
         "away": 1,
         "status": "FT"
     },
-    "82": {
+    "81": {
         "home": 2,
+        "away": 0,
+        "status": "FT"
+    },
+    "82": {
+        "home": 3,
         "away": 2,
-        "status": "LIVE"
+        "status": "FT"
     }
 }
