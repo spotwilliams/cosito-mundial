@@ -1089,8 +1089,8 @@
         {
             "id": 95,
             "phase": "round16",
-            "home": "Winner Match 86",
-            "away": "Winner Match 88",
+            "home": "Argentina",
+            "away": "Egypt",
             "utc": "2026-07-07T16:00:00Z",
             "city": "Atlanta"
         },
@@ -1098,7 +1098,7 @@
             "id": 96,
             "phase": "round16",
             "home": "Switzerland",
-            "away": "Winner Match 87",
+            "away": "Colombia",
             "utc": "2026-07-07T20:00:00Z",
             "city": "Vancouver"
         },
