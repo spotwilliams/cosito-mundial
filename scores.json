@@ -447,8 +447,8 @@
     },
     "89": {
         "home": 0,
-        "away": 0,
-        "status": "LIVE"
+        "away": 1,
+        "status": "FT"
     },
     "90": {
         "home": 0,
