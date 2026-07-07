@@ -474,5 +474,10 @@
         "home": 1,
         "away": 4,
         "status": "FT"
+    },
+    "95": {
+        "home": 3,
+        "away": 2,
+        "status": "FT"
     }
 }
