@@ -464,5 +464,15 @@
         "home": 2,
         "away": 3,
         "status": "FT"
+    },
+    "93": {
+        "home": 0,
+        "away": 1,
+        "status": "FT"
+    },
+    "94": {
+        "home": 1,
+        "away": 4,
+        "status": "FT"
     }
 }

@@ -43,6 +43,11 @@ $CORE      = "https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.wor
 
 function fail($msg) { fwrite(STDERR, "ERROR: $msg\n"); exit(1); }
 
+/** Live progress line to STDERR — shows what's happening while the script runs.
+ *  Unbuffered, so it appears in the terminal immediately (stdout below stays the
+ *  machine-readable end-of-run summary). */
+function progress($msg) { fwrite(STDERR, "» $msg\n"); }
+
 function read_json($path, $allowMissing = false) {
     if (!file_exists($path)) {
         if ($allowMissing) return [];
@@ -146,8 +151,11 @@ function ref_id($ref) {
 
 /* --------------------------------------------------------------- load data */
 
+progress("fetch-standings starting" . ($DRY ? " (dry-run)" : ""));
+progress("loading data.json");
 $data = read_json($DATA_FILE);
 if (empty($data['matches'])) fail("no 'matches' array in data.json");
+progress(count($data['matches']) . " matches loaded");
 
 // index: our canonical team name (normalised) -> name, from group-stage matches
 $ourNormIndex = [];
@@ -159,8 +167,10 @@ foreach ($data['matches'] as $m) {
 
 /* ------------------------------------------------------ fetch ESPN standings */
 
+progress("fetching ESPN group list");
 $groupList = http_get_json("$CORE/types/1/groups");
 if ($groupList === null || empty($groupList['items'])) fail("could not fetch group list from ESPN");
+progress(count($groupList['items']) . " group(s) to inspect");
 
 $teamNameCache = []; // espn team id -> ESPN displayName
 function team_name($teamRef, &$cache, $core) {
@@ -188,9 +198,10 @@ foreach ($groupList['items'] as $gItem) {
     if (!preg_match('/Group\s+([A-Z])/i', $group['name'] ?? '', $mm)) continue;
     $letter = strtoupper($mm[1]);
     $groupsSeen++;
+    progress("  Group $letter: reading standings");
 
     $st = http_get_json("$CORE/types/1/groups/$gid/standings/0");
-    if ($st === null || empty($st['standings'])) continue;
+    if ($st === null || empty($st['standings'])) { progress("  Group $letter: no standings yet"); continue; }
 
     foreach ($st['standings'] as $row) {
         $rank = null; $advanced = null;
@@ -206,11 +217,13 @@ foreach ($groupList['items'] as $gItem) {
         if ($name === null) { if ($espnName !== '') $unmapped[$espnName] = true; continue; }
 
         $confirmed[$letter][$rank === 1 ? 'winner' : 'runner'] = $name;
+        progress("  Group $letter: " . ($rank === 1 ? 'winner' : 'runner-up') . " = $name");
     }
 }
 
 /* ------------------------------------------------------------- fill bracket */
 
+progress("filling bracket placeholders from confirmed groups");
 $changes = []; // id => "old -> new"
 
 foreach ($data['matches'] as $i => &$match) {
@@ -226,6 +239,7 @@ foreach ($data['matches'] as $i => &$match) {
         if ($name !== null && $name !== $val) {
             $changes[$match['id']][] = "$side: $val -> $name";
             $match[$side] = $name;
+            progress("  match #{$match['id']} $side: $val -> $name");
         }
     }
 }
@@ -233,7 +247,9 @@ unset($match);
 
 /* ------------------------------------------------------------------ output */
 
+progress("writing data.json" . ($DRY ? " (dry-run: no disk writes)" : ""));
 $written = write_json_if_changed($DATA_FILE, $data, $DRY);
+progress("data.json " . ($written ? "changed" : "unchanged"));
 
 $tag = $DRY ? '[dry-run] ' : '';
 echo $tag . "groups read: $groupsSeen, confirmed slots: " .

@@ -32,6 +32,11 @@ $WINDOW_END   = '2026-07-19';
 
 function fail($msg) { fwrite(STDERR, "ERROR: $msg\n"); exit(1); }
 
+/** Live progress line to STDERR — shows what's happening while the script runs.
+ *  Unbuffered, so it appears in the terminal immediately (stdout below stays the
+ *  machine-readable end-of-run summary). */
+function progress($msg) { fwrite(STDERR, "» $msg\n"); }
+
 function read_json($path, $allowMissing = false) {
     if (!file_exists($path)) {
         if ($allowMissing) return [];
@@ -130,9 +135,12 @@ function http_get_json($url) {
 
 /* --------------------------------------------------------------- load data */
 
+progress("fetch-results starting" . ($DRY ? " (dry-run)" : ""));
+progress("loading data.json + scores.json");
 $data   = read_json($DATA_FILE);
 $scores = read_json($SCORES_FILE, true);
 if (empty($data['matches'])) fail("no 'matches' array in data.json");
+progress(count($data['matches']) . " matches loaded, " . count($scores) . " scores on record");
 
 // index: our canonical team name (normalised) -> name
 $ourNormIndex = [];
@@ -158,6 +166,8 @@ $end   = new DateTime(min($WINDOW_END, $today->format('Y-m-d')));
 $end->modify('+1 day'); // include matches kicking off later today/tomorrow (UTC)
 $cur   = new DateTime($WINDOW_START);
 
+progress("fetching ESPN scoreboard " . $WINDOW_START . " .. " . $end->format('Y-m-d'));
+
 $scoreChanges = [];   // id => "H-A FT"
 $advanceChanges = []; // id => "X vs Y"
 $fetchedDays = 0; $failDays = 0;
@@ -167,9 +177,10 @@ while ($cur <= $end) {
     $cur->modify('+1 day');
     $url = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=$ymd";
     $j = http_get_json($url);
-    if ($j === null) { $failDays++; continue; }
+    if ($j === null) { $failDays++; progress("  $ymd: fetch failed"); continue; }
     $fetchedDays++;
     if (empty($j['events'])) continue;
+    progress("  $ymd: " . count($j['events']) . " event(s)");
 
     foreach ($j['events'] as $ev) {
         if (empty($ev['competitions'][0])) continue;
@@ -224,6 +235,7 @@ while ($cur <= $end) {
                 $match['home'] = $ehName;
                 $match['away'] = $eaName;
                 $advanceChanges[$id] = "$ehName vs $eaName";
+                progress("    match #$id set: $ehName vs $eaName");
             }
         }
 
@@ -269,6 +281,7 @@ while ($cur <= $end) {
             $scores[(string)$id] = $new;
             $pens = isset($new['penHome']) ? " (pens {$new['penHome']}-{$new['penAway']})" : '';
             $scoreChanges[$id] = "$outHome-$outAway $status$pens";
+            progress("    match #$id score: {$match['home']} $outHome-$outAway {$match['away']} $status$pens");
         }
         unset($match);
     }
@@ -280,15 +293,22 @@ while ($cur <= $end) {
 // recorded shootout). Source of truth is OUR scores — no ESPN dependency, so
 // the bracket advances the moment a result lands. The logic lives in
 // bracket.php so it can be exercised by tests without touching the network.
+progress("fetch done: $fetchedDays day(s) ok" . ($failDays ? ", $failDays failed" : "") .
+    "; " . count($scoreChanges) . " score change(s), " . count($advanceChanges) . " advance(s)");
+progress("propagating knockout bracket");
 $bracketChanges = kc_propagate_bracket($data, $scores);
+progress(($bracketChanges ? count($bracketChanges) : 0) . " bracket match(es) advanced");
 
 /* ------------------------------------------------------------------ output */
 
 // keep scores.json ordered by numeric match id for clean diffs
 uksort($scores, fn($a, $b) => (int)$a <=> (int)$b);
 
+progress("writing files" . ($DRY ? " (dry-run: no disk writes)" : ""));
 $scoresWritten = write_json_if_changed($SCORES_FILE, $scores, $DRY);
 $dataWritten   = write_json_if_changed($DATA_FILE, $data, $DRY);
+progress("scores.json " . ($scoresWritten ? "changed" : "unchanged") .
+    ", data.json " . ($dataWritten ? "changed" : "unchanged"));
 
 $tag = $DRY ? '[dry-run] ' : '';
 echo $tag . "fetched $fetchedDays day(s)" . ($failDays ? ", $failDays failed" : '') . "\n";
