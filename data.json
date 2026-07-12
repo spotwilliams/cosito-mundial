@@ -1138,15 +1138,15 @@
             "id": 101,
             "phase": "semi",
             "home": "France",
-            "away": "Winner Match 98",
+            "away": "Spain",
             "utc": "2026-07-14T19:00:00Z",
             "city": "Dallas"
         },
         {
             "id": 102,
             "phase": "semi",
-            "home": "Winner Match 99",
-            "away": "Winner Match 100",
+            "home": "England",
+            "away": "Argentina",
             "utc": "2026-07-15T19:00:00Z",
             "city": "Atlanta"
         },
