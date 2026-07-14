@@ -1153,7 +1153,7 @@
         {
             "id": 103,
             "phase": "third",
-            "home": "Loser Match 101",
+            "home": "France",
             "away": "Loser Match 102",
             "utc": "2026-07-18T21:00:00Z",
             "city": "Miami"
@@ -1161,7 +1161,7 @@
         {
             "id": 104,
             "phase": "final",
-            "home": "Winner Match 101",
+            "home": "Spain",
             "away": "Winner Match 102",
             "utc": "2026-07-19T19:00:00Z",
             "city": "New York/NJ"
