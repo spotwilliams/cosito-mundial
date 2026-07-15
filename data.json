@@ -1154,7 +1154,7 @@
             "id": 103,
             "phase": "third",
             "home": "France",
-            "away": "Loser Match 102",
+            "away": "England",
             "utc": "2026-07-18T21:00:00Z",
             "city": "Miami"
         },
@@ -1162,7 +1162,7 @@
             "id": 104,
             "phase": "final",
             "home": "Spain",
-            "away": "Winner Match 102",
+            "away": "Argentina",
             "utc": "2026-07-19T19:00:00Z",
             "city": "New York/NJ"
         }
